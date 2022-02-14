@@ -1,0 +1,15 @@
+{
+    "frontend": {
+        "listen": ":8098"
+    },
+    "source": {
+        "type": "udp-client",
+        "ip": "127.0.0.1",
+        "port": 9000,
+        "display_name": "Your name",
+        "connection_password": "asd",
+        "command_password": "",
+        "update_interval_ms": 250
+    },
+    "sinks": []
+}
