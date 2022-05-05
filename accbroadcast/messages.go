@@ -103,4 +103,12 @@ type MsgBroadcastingEvent struct {
 }
 
 type MsgLap struct {
+	LapTime        time.Duration // Negative duration indicates unknown time
+	CarIndex       uint16
+	DriverIndex    uint16
+	SplitTimes     []time.Duration // Extended to include 3 times; negative durations indicate unknown times
+	IsInvalid      bool
+	IsValidForBest bool
+	IsOutLap       bool
+	IsInLap        bool
 }

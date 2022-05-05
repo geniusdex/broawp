@@ -42,48 +42,140 @@ func (st SessionType) ToString() string {
 	return ""
 }
 
-type Car struct {
-	CarId int
-}
+const (
+	entryListRequestTimeout time.Duration = 1 * time.Second
+)
 
 type State struct {
-	client       *accbroadcast.Client
-	connectionId uint32
+	client               *accbroadcast.Client
+	connectionId         uint32
+	lastEntryListRequest time.Time
 
-	SessionType  SessionType
-	FocusedCarId uint16
+	SessionType        SessionType
+	TimeRemaining      time.Duration
+	FocusedCarPosition int
+	FocusedCarId       int
+	FocusedBestLap     time.Duration
+	FocusedLastLap     time.Duration
+	FocusedCurrentLap  time.Duration
+	FocusedLapDelta    time.Duration
+	TrackGaps          []CarGap
 
 	Cars map[int]*Car
 
 	SessionTypeUpdates   chan string
 	TimeRemainingUpdates chan time.Duration
+	FocusedCarUpdates    chan *Car
 	PositionUpdates      chan int
 	CarUpdates           chan *Car
+	BestLapUpdates       chan time.Duration
+	LastLapUpdates       chan time.Duration
+	CurrentLapUpdates    chan time.Duration
+	LapDeltaUpdates      chan time.Duration
+	TrackGapUpdates      chan []CarGap
 }
 
 func NewState(client *accbroadcast.Client) *State {
 	state := &State{
 		client:               client,
+		FocusedBestLap:       -1 * time.Second,
+		FocusedLastLap:       -1 * time.Second,
+		FocusedCurrentLap:    -1 * time.Second,
 		Cars:                 make(map[int]*Car),
 		SessionTypeUpdates:   make(chan string, 1024),
 		TimeRemainingUpdates: make(chan time.Duration, 1024),
+		FocusedCarUpdates:    make(chan *Car, 1024),
 		PositionUpdates:      make(chan int, 1024),
 		CarUpdates:           make(chan *Car, 1024),
+		BestLapUpdates:       make(chan time.Duration, 1024),
+		LastLapUpdates:       make(chan time.Duration, 1024),
+		CurrentLapUpdates:    make(chan time.Duration, 1024),
+		LapDeltaUpdates:      make(chan time.Duration, 1024),
+		TrackGapUpdates:      make(chan []CarGap, 1024),
 	}
 
 	go state.handleIncomingMessages()
+	go state.updateGapsEvery(1 * time.Second)
 
 	return state
 }
 
 func (s *State) Close() {
-
+	s.client.Unregister()
 }
 
 func (s *State) Burst() {
 	s.SessionTypeUpdates <- s.SessionType.ToString()
+	s.TimeRemainingUpdates <- s.TimeRemaining
+	if car, ok := s.Cars[s.FocusedCarId]; ok {
+		s.FocusedCarUpdates <- car
+	}
+	s.PositionUpdates <- s.FocusedCarPosition
 	for _, car := range s.Cars {
 		s.CarUpdates <- car
+	}
+	s.BestLapUpdates <- s.FocusedBestLap
+	s.LastLapUpdates <- s.FocusedLastLap
+	s.CurrentLapUpdates <- s.FocusedCurrentLap
+	s.LapDeltaUpdates <- s.FocusedLapDelta
+	s.TrackGapUpdates <- s.TrackGaps
+}
+
+func (s *State) setSessionType(sessionType SessionType) {
+	if s.SessionType != sessionType {
+		s.SessionType = sessionType
+		s.SessionTypeUpdates <- sessionType.ToString()
+	}
+}
+
+func (s *State) setTimeRemaining(timeRemaining time.Duration) {
+	if s.TimeRemaining != timeRemaining {
+		s.TimeRemaining = timeRemaining
+		s.TimeRemainingUpdates <- timeRemaining
+	}
+}
+
+func (s *State) setFocusedCarPosition(position int) {
+	if s.FocusedCarPosition != position {
+		s.FocusedCarPosition = position
+		s.PositionUpdates <- position
+	}
+}
+
+func (s *State) setFocusedCarId(carId int) {
+	if s.FocusedCarId != carId {
+		s.FocusedCarId = carId
+		if car, ok := s.Cars[carId]; ok {
+			s.FocusedCarUpdates <- car
+		}
+	}
+}
+
+func (s *State) setBestLap(lapTime time.Duration) {
+	if s.FocusedBestLap != lapTime {
+		s.FocusedBestLap = lapTime
+		s.BestLapUpdates <- lapTime
+	}
+}
+
+func (s *State) setLastLap(lapTime time.Duration) {
+	if s.FocusedLastLap != lapTime {
+		s.FocusedLastLap = lapTime
+		s.LastLapUpdates <- lapTime
+	}
+}
+
+func (s *State) setCurrentLap(lapTime time.Duration) {
+	if s.FocusedCurrentLap != lapTime {
+		s.FocusedCurrentLap = lapTime
+		s.CurrentLapUpdates <- lapTime
+	}
+}
+
+func (s *State) setLapDelta(delta time.Duration) {
+	if s.FocusedLapDelta != delta {
+		s.FocusedLapDelta = delta
+		s.LapDeltaUpdates <- delta
 	}
 }
 
@@ -124,34 +216,50 @@ func (s *State) handleEntryList(msg *accbroadcast.MsgEntryList) {
 }
 
 func (s *State) handleEntryListCar(msg *accbroadcast.MsgEntryListCar) {
-	log.Printf("Car ID %v has race number %v", msg.CarId, msg.RaceNumber)
-	car := &Car{
-		CarId: int(msg.CarId),
+	// log.Printf("Car ID %v has race number %v", msg.CarId, msg.RaceNumber)
+	carId := int(msg.CarId)
+	if car, ok := s.Cars[carId]; ok {
+		car.UpdateFromEntryList(msg)
+		if car.requireEntryListUpdate {
+			s.requestEntryList()
+		}
+	} else {
+		s.Cars[carId] = NewCar(msg)
 	}
-	s.Cars[int(msg.CarId)] = car
-	s.CarUpdates <- car
+	s.CarUpdates <- s.Cars[carId]
 }
 
 func (s *State) handleRealtimeUpdate(msg *accbroadcast.MsgRealtimeUpdate) {
 	log.Printf("Time Remaining: %v", msg.SessionEndTime)
-	if s.SessionType != SessionType(msg.SessionType) {
-		s.SessionType = SessionType(msg.SessionType)
-		s.SessionTypeUpdates <- s.SessionType.ToString()
-	}
-	s.TimeRemainingUpdates <- msg.SessionEndTime
-	s.FocusedCarId = uint16(msg.FocusedCarIndex)
+	s.setSessionType(SessionType(msg.SessionType))
+	s.setTimeRemaining(msg.SessionEndTime)
+	s.setFocusedCarId(int(msg.FocusedCarIndex))
 }
 
 func (s *State) handleRealtimeCarUpdate(msg *accbroadcast.MsgRealtimeCarUpdate) {
 	// log.Printf("Update for car ID %v", msg.CarIndex)
-	if msg.CarIndex == s.FocusedCarId {
+	if int(msg.CarIndex) == s.FocusedCarId {
 		log.Printf("Position: %v/%v", msg.CupPosition, len(s.Cars))
-		s.PositionUpdates <- int(msg.CupPosition)
+		s.setFocusedCarPosition(int(msg.CupPosition))
+		s.setBestLap(msg.BestSessionLap.LapTime)
+		s.setLastLap(msg.LastLap.LapTime)
+		s.setCurrentLap(msg.CurrentLap.LapTime)
+		s.setLapDelta(msg.Delta)
+	}
+	carId := int(msg.CarIndex)
+	if car, ok := s.Cars[carId]; ok {
+		car.UpdateFromRealtime(msg)
+	} else {
+		s.requestEntryList()
 	}
 }
 
 func (s *State) requestEntryList() {
-	if err := s.client.RequestEntryList(s.connectionId); err != nil {
-		log.Printf("Failed to request entry list: %v", err)
+	now := time.Now()
+	if (now.Sub(s.lastEntryListRequest)) > entryListRequestTimeout {
+		s.lastEntryListRequest = now
+		if err := s.client.RequestEntryList(s.connectionId); err != nil {
+			log.Printf("Failed to request entry list: %v", err)
+		}
 	}
 }

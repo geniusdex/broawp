@@ -33,10 +33,18 @@ func (br *bufferReader) ReadUint16() uint16 {
 	return val
 }
 
+func (br *bufferReader) ReadInt16() int16 {
+	return int16(br.ReadUint16())
+}
+
 func (br *bufferReader) ReadUint32() uint32 {
 	val := binary.LittleEndian.Uint32(br.buf[br.pos : br.pos+4])
 	br.pos += 4
 	return val
+}
+
+func (br *bufferReader) ReadInt32() int32 {
+	return int32(br.ReadUint32())
 }
 
 func (br *bufferReader) ReadFloat32() float32 {

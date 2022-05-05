@@ -19,7 +19,7 @@ func main() {
 
 	defer client.Close()
 
-	if err := client.Register("broawp", "asd", 1000*time.Millisecond, ""); err != nil {
+	if err := client.Register("broawp", "asd", 100*time.Millisecond, ""); err != nil {
 		log.Fatalf("cannot register: %v", err)
 	}
 

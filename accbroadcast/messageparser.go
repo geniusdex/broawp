@@ -2,6 +2,7 @@ package accbroadcast
 
 import (
 	"fmt"
+	"math"
 	"time"
 )
 
@@ -125,7 +126,7 @@ func (mp *messageParser) parseRealtimeCarUpdate(br *bufferReader) (*MsgRealtimeC
 		TrackPosition:  br.ReadUint16(),
 		SplinePosition: br.ReadFloat32(),
 		Laps:           br.ReadUint16(),
-		Delta:          time.Duration(br.ReadUint32()) * time.Millisecond,
+		Delta:          time.Duration(br.ReadInt32()) * time.Millisecond,
 	}
 	var err error
 	if msg.BestSessionLap, err = mp.parseLap(br); err != nil {
@@ -150,7 +151,33 @@ func (mp *messageParser) parseBroadcastingEvent(br *bufferReader) (*MsgBroadcast
 	return msg, nil
 }
 
+func (mp *messageParser) readOptionalDuration(br *bufferReader) time.Duration {
+	duration := br.ReadInt32()
+	if duration == math.MaxInt32 {
+		return -1 * time.Millisecond
+	} else {
+		return time.Duration(duration) * time.Millisecond
+	}
+}
+
 func (mp *messageParser) parseLap(br *bufferReader) (*MsgLap, error) {
-	msg := &MsgLap{}
+	msg := &MsgLap{
+		LapTime:     mp.readOptionalDuration(br),
+		CarIndex:    br.ReadUint16(),
+		DriverIndex: br.ReadUint16(),
+		SplitTimes:  make([]time.Duration, 3),
+	}
+	for i := range msg.SplitTimes {
+		msg.SplitTimes[i] = -1 * time.Millisecond
+	}
+	nrSplits := int(br.ReadByte())
+	for i := 0; i < nrSplits; i++ {
+		msg.SplitTimes[i] = mp.readOptionalDuration(br)
+	}
+	msg.IsInvalid = br.ReadBool()
+	msg.IsValidForBest = br.ReadBool()
+	msg.IsOutLap = br.ReadBool()
+	msg.IsInLap = br.ReadBool()
+
 	return msg, nil
 }

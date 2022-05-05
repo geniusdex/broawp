@@ -70,6 +70,8 @@ func Run(state *accrace.State) error {
 	go f.sendWebSocketUpdates()
 
 	http.HandleFunc("/", f.indexHandler)
+	http.HandleFunc("/disconnect", f.disconnectHandler)
+	http.HandleFunc("/overlay", f.overlayHandler)
 	http.HandleFunc("/ws", f.webSocketHandler)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

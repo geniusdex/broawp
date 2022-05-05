@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BROAWP</title>
+<style type="text/css">
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.label {
+    font-size: 38px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -3px 3px 0px #4B5763;
+}
+.sublabel {
+    font-size: 24px;
+    font-family: sans-serif;
+    color: rgb(227, 224, 252);
+    text-shadow: -2px 2px 0px #323A36;
+}
+.label2 {
+    font-size: 38px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -3px 3px 0px #323A36;
+}
+
+.shadow {
+    fill: #657484;
+}
+
+#session_type {
+    position: absolute;
+    top: 5px;
+    left: 840px;
+    width: 240px;
+    text-align: center;
+}
+
+#time_remaining {
+    position: absolute;
+    top: 8px;
+    left: 670px;
+    width: 150px;
+    text-align: center;
+}
+
+#position_all {
+    position: absolute;
+    top: 8px;
+    left: 1100px;
+    width: 150px;
+    text-align: center;
+}
+
+#laptimes_container {
+    position: absolute;
+    top: 40px;
+    left: 0px;
+}
+
+#laptimes {
+}
+
+.laptime {
+    position: relative;
+    height: 36px;
+    font-size: 22px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.laptime_label {
+    position: absolute;
+    top: 9px;
+    left: 0px;
+    width: 90px;
+    text-align: right;
+    font-size: 18px;
+    color: rgb(227, 224, 252);
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.laptime_time {
+    position: absolute;
+    top: 5px;
+    left: 100px;
+    width: 100px;
+    overflow: hidden;
+    text-align: right;
+}
+
+.laptime_delta {
+    position: absolute;
+    top: 5px;
+    left: 210px;
+    width: 84px;
+    overflow: hidden;
+    text-align: right;
+}
+
+#nearby_container {
+    position: absolute;
+    /* top: 450px; */
+    bottom: 457px;
+    left: 0px;
+    /* height: 1080px; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* visibility: hidden; */
+}
+
+#nearby {
+}
+
+.nearby_header {
+    position: relative;
+    height: 27px;
+    font-family: sans-serif;
+    font-size: 18px;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.nearby_header_text {
+    position: absolute;
+    top: 3px;
+    left: 25px;
+}
+
+.nearby {
+    position: relative;
+    height: 36px;
+}
+
+.nearby_me {
+    font-size: 22px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.nearby_others {
+    font-size: 22px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.nearby_number {
+    position: absolute;
+    top: 5px;
+    left: 0px;
+    width: 75px;
+    text-align: right;
+}
+
+.nearby_name {
+    position: absolute;
+    top: 5px;
+    left: 100px;
+}
+
+.nearby_time {
+    position: absolute;
+    top: 5px;
+    left: 230px;
+    width: 150px;
+    overflow: hidden;
+    text-align: right;
+}
+</style>
+</head>
+<body>
+<svg width="1920" height="1080" version="2.0">
+    <!-- Top left -->
+<!--    <path d="M-8,4
+             l0,120 l160,0 l80,-120
+             l20,0, l-80,120 l40,0 l80,-120
+             l20,0, l-80,120 l20,0 l80,-120
+             " fill="#657484" stroke="none" stroke-width="0"/>
+    <path d="M0,0
+             l0,120 l160,0 l80,-120
+             l20,0, l-80,120 l40,0 l80,-120
+             l20,0, l-80,120 l20,0 l80,-120
+             " fill="#ff641a" stroke="none" stroke-width="0"/> -->
+    <!-- Top middle: status bar -->
+    <path d="M516,4
+             l40,60 l20,0 l-40,-60 l20,0
+             l40,60 l40,0 l-40,-60 l20,0
+             l40,60 l596,0 l40,-60 l20,0
+             l-40,60 l40,0 l40,-60 l20,0
+             l-40,60 l20,0 l40,-60
+             " fill="#ff641a" stroke="none" stroke-width="0"/>
+    <path d="M520,0
+             l40,60 l20,0 l-40,-60 l20,0
+             l40,60 l40,0 l-40,-60 l20,0
+             l40,60 l600,0 l40,-60 l20,0
+             l-40,60 l40,0 l40,-60 l20,0
+             l-40,60 l20,0 l40,-60
+             " fill="#657484" stroke="none" stroke-width="0"/>
+    <path d="M817,-5
+             l40,60 l196,0 l40,-60
+             " fill="#323A36" stroke="none" stroke-width="0"/>
+    <path d="M810,0
+             l0,4 l100,0 l0,-4
+             " fill="#657484" stroke="none" stroke-width="0"/>
+    <path d="M820,-8
+             l40,60 l200,0 l40,-60
+             " fill="#ff641a" stroke="none" stroke-width="0"/>
+
+    <!-- Lap times -->
+    <symbol id="laptime_top" width="825" height="45">
+        <path d="M2,3
+                l-24,36 l224,0 l24,-36 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+        <path d="M0,0
+                l-24,36 l224,0 l24,-36 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+    </symbol>
+    <symbol id="laptime_with_delta" width="825" height="45">
+        <use href="#laptime_top" />
+        <path d="M236,3
+                l-24,36 l84,0 l24,-36 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M234,0
+                l-24,36 l84,0 l24,-36 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />W
+    </symbol>
+    <symbol id="laptime" width="825" height="45">
+        <use href="#laptime_top" />
+        <path d="M0,0
+                l0,1 l200,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
+
+    <!-- Nearby cars -->
+    <symbol id="nearby_header" width="825" height="45">
+        <path d="M2,3
+                l-18,27 l174,0 l18,-27 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M0,0
+                l-18,27 l174,0 l18,-27 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+    </symbol>
+    <symbol id="nearby_me" width="825" height="45">
+        <path d="M2,3
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M0,0
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+        <path d="M0,0
+                l0,1 l380,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
+    <symbol id="nearby_others_top" width="825" height="45">
+        <path d="M2,3
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+        <path d="M0,0
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M0,0
+                l0,1 l156,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
+    <symbol id="nearby_others" width="825" height="45">
+        <use href="#nearby_others_top" />
+        <path d="M0,0
+                l0,1 l380,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
+</svg>
+<div id="session_type" class="label">-</div>
+<div id="time_remaining" class="label2">-:--:--</div>
+<div id="position_all" class="label2">
+    <span class="sublabel">P</span>
+    <span id="position">-</span>
+    <span class="sublabel">
+        /
+        <span id="position_total">-</span>
+    </span>
+</div>
+<div id="laptimes_container">
+    <div id="laptimes">
+        <div class="laptime">
+            <svg width="825" height="45" version="2.0"><use href="#laptime_with_delta" /></svg>
+            <div class="laptime_label">Current</div>
+            <div id="laptime_current" class="laptime_time">-.--.---</div>
+            <div id="laptime_delta" class="laptime_delta">+0.00</div>
+        </div>
+        <div class="laptime">
+            <svg width="825" height="45" version="2.0"><use href="#laptime" /></svg>
+            <div class="laptime_label">Best</div>
+            <div id="laptime_best" class="laptime_time">-:--.---</div>
+        </div>
+        <div class="laptime">
+            <svg width="825" height="45" version="2.0"><use href="#laptime" /></svg>
+            <div class="laptime_label">Last</div>
+            <div id="laptime_last" class="laptime_time">-.--.---</div>
+        </div>
+    </div>
+</div>
+<div id="nearby_container">
+    <div id="nearby">
+        <div class="nearby_header">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_header" /></svg>
+            <div class="nearby_header_text">Gaps on Track</div>
+        </div>
+        <div class="nearby nearby_others">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_others_top" /></svg>
+            <div class="nearby_number" id="nearby_ahead3_number"></div>
+            <div class="nearby_name" id="nearby_ahead3_name"></div>
+            <div class="nearby_time" id="nearby_ahead3_time"></div>
+        </div>
+        <div class="nearby nearby_others">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
+            <div class="nearby_number" id="nearby_ahead2_number"></div>
+            <div class="nearby_name" id="nearby_ahead2_name"></div>
+            <div class="nearby_time" id="nearby_ahead2_time"></div>
+        </div>
+        <div class="nearby nearby_others">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
+            <div class="nearby_number" id="nearby_ahead1_number"></div>
+            <div class="nearby_name" id="nearby_ahead1_name"></div>
+            <div class="nearby_time" id="nearby_ahead1_time"></div>
+        </div>
+        <div class="nearby nearby_me">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_me" /></svg>
+            <div class="nearby_number" id="nearby_me_number"></div>
+            <div class="nearby_name" id="nearby_me_name"></div>
+            <div class="nearby_time" id="nearby_me_time"></div>
+        </div>
+        <div class="nearby nearby_others">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
+            <div class="nearby_number" id="nearby_behind1_number"></div>
+            <div class="nearby_name" id="nearby_behind1_name"></div>
+            <div class="nearby_time" id="nearby_behind1_time"></div>
+        </div>
+        <div class="nearby nearby_others">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
+            <div class="nearby_number" id="nearby_behind2_number"></div>
+            <div class="nearby_name" id="nearby_behind2_name"></div>
+            <div class="nearby_time" id="nearby_behind2_time"></div>
+        </div>
+        <div class="nearby nearby_others">
+            <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
+            <div class="nearby_number" id="nearby_behind3_number"></div>
+            <div class="nearby_name" id="nearby_behind3_name"></div>
+            <div class="nearby_time" id="nearby_behind3_time"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+var g_cars = {}
+var g_currentLapTime_ms = -1;
+var g_currentLapTimeUpdate = performance.now();
+var g_focusedCarId = 0;
+
+function formatTime(time_ms)
+{
+    var ms = time_ms % 1000;
+    var time_s = (time_ms - ms) / 1000;
+    var s = time_s % 60;
+    var time_m = (time_s - s) / 60;
+    var m = time_m % 60;
+    var h = (time_m - m) / 60;
+
+    return h.toString() + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+}
+
+function formatLapTime(time_ms)
+{
+    if (time_ms < 0)
+    {
+        return '-:--.---';
+    }
+
+    var ms = time_ms % 1000;
+    var time_s = (time_ms - ms) / 1000;
+    var s = time_s % 60;
+    var m = (time_s - s) / 60;
+
+    return m.toString() + ':' + s.toString().padStart(2, '0') + '.' + ms.toString().padStart(3, '0');
+}
+
+function formatTimeDelta(time_ms)
+{
+    if (time_ms == 0)
+    {
+        return '';
+    }
+
+    var sign = (time_ms < 0) ? '-' : '+';
+    var absTime_ms = Math.abs(time_ms);
+    var ms = absTime_ms % 1000;
+    var s = (absTime_ms - ms) / 1000;
+
+    return sign + s.toString() + '.' + ms.toString().padStart(3, '0').substr(0, 2);
+}
+
+function setSessionType(sessionType)
+{
+    document.getElementById('session_type').innerText = `${sessionType}`;
+}
+
+function setTimeRemainingMS(timeRemaining_ms)
+{
+    document.getElementById('time_remaining').innerText = formatTime(timeRemaining_ms);
+}
+
+function setFocusedCar(car)
+{
+    g_focusedCarId = car.CarId;
+}
+
+function setPosition(position)
+{
+    document.getElementById('position').innerText = `${position}`;
+}
+
+function setCar(car)
+{
+    g_cars[car.CarId] = car;
+
+    var total = Object.keys(g_cars).length
+    document.getElementById('position_total').innerText = `${total}`;
+}
+
+function makeSetLapTime(element_id)
+{
+    return function(lapTime_ms)
+    {
+        document.getElementById(element_id).innerText = formatLapTime(lapTime_ms);
+    };
+}
+
+function setCurrentLapTime(lapTime_ms)
+{
+    g_currentLapTime_ms = lapTime_ms;
+    g_currentLapTimeUpdate = performance.now();
+    document.getElementById('laptime_current').innerText = formatLapTime(lapTime_ms);
+}
+
+function setLapDelta(delta_ms)
+{
+    var sign = (delta_ms >= 0) ? '+' : '';
+    document.getElementById('laptime_delta').innerText = sign + (delta_ms / 1000).toFixed(2);
+}
+
+var g_lastUpdate = performance.now()
+function redrawCurrentLapTime(timestamp)
+{
+    if (g_currentLapTime_ms >= 0)
+    {
+        lapTime_ms = g_currentLapTime_ms + Math.round(timestamp - g_currentLapTimeUpdate);
+        document.getElementById('laptime_current').innerText = formatLapTime(lapTime_ms);
+    }
+    window.requestAnimationFrame(redrawCurrentLapTime);
+}
+
+window.requestAnimationFrame(redrawCurrentLapTime);
+
+function updateTrackGap(id, carId, gap_ms)
+{
+    const driver = g_cars[carId].Drivers[g_cars[carId].CurrentDriverIndex];
+
+    document.getElementById(id + '_number').innerText = g_cars[carId].RaceNumber;
+    document.getElementById(id + '_name').innerText = driver.FirstName.charAt(0) + '. ' + driver.LastName;
+    document.getElementById(id + '_time').innerText = formatTimeDelta(gap_ms);
+}
+
+function setTrackGaps(trackGaps)
+{
+    gaps = {};
+    for (const gap of trackGaps)
+    {
+        gaps[gap.CarId] = gap;
+    }
+    
+    if (g_focusedCarId in gaps)
+    {
+        const current = gaps[g_focusedCarId];
+        const ahead1 = gaps[current.CarIdAhead];
+        const ahead2 = gaps[ahead1.CarIdAhead];
+        const behind1 = gaps[current.CarIdBehind];
+        const behind2 = gaps[behind1.CarIdBehind];
+
+        const gap_ahead1 = current.GapAhead_ms;
+        const gap_ahead2 = gap_ahead1 + ahead1.GapAhead_ms;
+        const gap_ahead3 = gap_ahead2 + ahead2.GapAhead_ms;
+        const gap_behind1 = current.GapBehind_ms;
+        const gap_behind2 = gap_behind1 + behind1.GapBehind_ms;
+        const gap_behind3 = gap_behind2 + behind2.GapBehind_ms;
+
+        updateTrackGap('nearby_ahead3', ahead2.CarIdAhead, gap_ahead3);
+        updateTrackGap('nearby_ahead2', ahead1.CarIdAhead, gap_ahead2);
+        updateTrackGap('nearby_ahead1', current.CarIdAhead, gap_ahead1);
+        updateTrackGap('nearby_me', current.CarId, 0);
+        updateTrackGap('nearby_behind1', current.CarIdBehind, -gap_behind1);
+        updateTrackGap('nearby_behind2', behind1.CarIdBehind, -gap_behind2);
+        updateTrackGap('nearby_behind3', behind2.CarIdBehind, -gap_behind3);
+    }
+}
+
+function webSocketEndpoint()
+{
+    var protocol = ((window.location.protocol === "https:") ? "wss:" : "ws:");
+    var basepath = window.location.pathname.substr(0, window.location.pathname.lastIndexOf("/"));
+    return protocol + "//" + window.location.host + basepath + "/ws";
+}
+
+var g_webSocket = new WebSocket(webSocketEndpoint());
+
+g_webSocket.addEventListener('error', function(event)
+{
+    console.log(event);
+});
+
+g_webSocket.addEventListener('close', function(event)
+{
+    console.log(event);
+});
+
+var messageHandlers = {};
+
+g_webSocket.addEventListener('message', function(event)
+{
+    var messages = event.data.split('\n');
+    for (var i = 0; i < messages.length; i++)
+    {
+        if (messages[i].length > 0)
+        {
+            var msg = JSON.parse(messages[i]);
+            // console.log(msg);
+            if ('type' in msg && 'data' in msg && msg.type in messageHandlers)
+            {
+                try
+                {
+                    messageHandlers[msg.type](msg.data);
+                }
+                catch (error)
+                {
+                    console.error(error, msg);
+                }
+            }
+            else
+            {
+                console.log('Ignoring unexpected message', msg);
+            }
+        }
+    }
+});
+
+function newHandler(type, handler)
+{
+    messageHandlers[type] = handler;
+}
+
+newHandler('sessionType', setSessionType);
+newHandler('timeRemaining_ms', setTimeRemainingMS);
+newHandler('focusedCar', setFocusedCar);
+newHandler('position', setPosition);
+newHandler('car', setCar);
+newHandler('bestlaptime_ms', makeSetLapTime('laptime_best'));
+newHandler('lastlaptime_ms', makeSetLapTime('laptime_last'));
+newHandler('currentlaptime_ms', setCurrentLapTime);
+newHandler('lapdelta_ms', setLapDelta);
+newHandler('trackGaps', setTrackGaps);
+
+</script>
+</html>
