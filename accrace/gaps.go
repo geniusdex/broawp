@@ -29,6 +29,9 @@ func (s *State) updateGaps() {
 	}
 
 	sort.Slice(cars, func(i, j int) bool {
+		if cars[i].IsConnected != cars[j].IsConnected {
+			return cars[i].IsConnected
+		}
 		return cars[i].SplinePosition < cars[j].SplinePosition
 	})
 
@@ -36,6 +39,11 @@ func (s *State) updateGaps() {
 		for currentIndex, current := range cars {
 			nextIndex := (currentIndex + 1) % len(cars)
 			next := cars[nextIndex]
+
+			if !next.IsConnected {
+				nextIndex = 0
+				next = cars[nextIndex]
+			}
 
 			if (len(current.currentLapPositionTimes) > 0) && (len(next.currentLapPositionTimes) > 0) {
 				// Find when the next car was last at my position
@@ -46,6 +54,10 @@ func (s *State) updateGaps() {
 					current.nextOnTrack = &carGap{next, gap}
 					next.previousOnTrack = &carGap{current, gap}
 				}
+			}
+
+			if nextIndex == 0 {
+				break
 			}
 		}
 	}

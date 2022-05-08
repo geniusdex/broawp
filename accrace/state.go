@@ -44,6 +44,9 @@ func (st SessionType) ToString() string {
 
 const (
 	entryListRequestTimeout time.Duration = 1 * time.Second
+	gapsCalculationPeriod                 = 1 * time.Second
+	maintenancePeriod                     = 10 * time.Second
+	carUpdateTimeout                      = 10 * time.Second
 )
 
 type State struct {
@@ -95,7 +98,8 @@ func NewState(client *accbroadcast.Client) *State {
 	}
 
 	go state.handleIncomingMessages()
-	go state.updateGapsEvery(1 * time.Second)
+	go state.updateGapsEvery(gapsCalculationPeriod)
+	go state.performMaintenanceEvery(maintenancePeriod)
 
 	return state
 }
@@ -213,6 +217,14 @@ func (s *State) handleRegistrationResult(msg *accbroadcast.MsgRegistrationResult
 
 func (s *State) handleEntryList(msg *accbroadcast.MsgEntryList) {
 	// log.Printf("Received entry list: %#v", msg)
+	var carIdIsPresent = make(map[int]bool)
+	for _, carId := range msg.CarIds {
+		carIdIsPresent[int(carId)] = true
+	}
+
+	for carId, car := range s.Cars {
+		car.IsConnected = carIdIsPresent[carId]
+	}
 }
 
 func (s *State) handleEntryListCar(msg *accbroadcast.MsgEntryListCar) {
@@ -261,5 +273,24 @@ func (s *State) requestEntryList() {
 		if err := s.client.RequestEntryList(s.connectionId); err != nil {
 			log.Printf("Failed to request entry list: %v", err)
 		}
+	}
+}
+
+func (s *State) performMaintenanceEvery(interval time.Duration) {
+	for range time.Tick(interval) {
+		s.performMaintenance()
+	}
+}
+
+func (s *State) performMaintenance() {
+	now := time.Now()
+	requireEntryListUpdate := false
+	for _, car := range s.Cars {
+		if now.Sub(car.lastUpdate) > carUpdateTimeout {
+			requireEntryListUpdate = true
+		}
+	}
+	if requireEntryListUpdate {
+		s.requestEntryList()
 	}
 }

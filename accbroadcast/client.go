@@ -45,7 +45,7 @@ func NewClient(host string, port int) (*Client, error) {
 		}
 
 		// Sleep a while to get the Unregister message out before we close the socket
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 
 		client.Close()
 	})

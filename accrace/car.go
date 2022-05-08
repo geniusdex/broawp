@@ -37,6 +37,7 @@ type Car struct {
 	RaceNumber         int
 	CurrentDriverIndex int
 	Drivers            []*Driver
+	IsInPit            bool
 	Gear               int // R = -1,  N = 0,  1 = 1,  2 = 2,  ...
 	SpeedKmh           int
 	Position           int     // Official P/Q/R position (1-based)
@@ -49,6 +50,7 @@ type Car struct {
 	LastLap            *Lap
 	CurrentLap         *Lap
 
+	lastUpdate                 time.Time
 	requireEntryListUpdate     bool
 	requireTrackPositionUpdate bool
 
@@ -96,12 +98,16 @@ func (c *Car) UpdateFromEntryList(msg *accbroadcast.MsgEntryListCar) {
 }
 
 func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate) {
+	c.lastUpdate = time.Now()
 	c.IsConnected = true
 	if (len(c.Drivers) != int(msg.DriverCount)) || (int(msg.DriverIndex) >= len(c.Drivers)) {
 		c.requireEntryListUpdate = true
 	} else {
 		c.CurrentDriverIndex = int(msg.DriverIndex)
 	}
+	c.IsInPit = (msg.CarLocation == accbroadcast.CarLocationPitLane) ||
+		(msg.CarLocation == accbroadcast.CarLocationPitEntry) ||
+		(msg.CarLocation == accbroadcast.CarLocationPitExit)
 	c.Gear = msg.Gear
 	c.SpeedKmh = int(msg.SpeedKmh)
 	c.Position = int(msg.Position)

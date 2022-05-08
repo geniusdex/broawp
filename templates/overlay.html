@@ -470,11 +470,14 @@ window.requestAnimationFrame(redrawCurrentLapTime);
 
 function updateTrackGap(id, carId, gap_ms)
 {
-    const driver = g_cars[carId].Drivers[g_cars[carId].CurrentDriverIndex];
+    const car = g_cars[carId];
+    const driver = car.Drivers[car.CurrentDriverIndex];
 
-    document.getElementById(id + '_number').innerText = g_cars[carId].RaceNumber;
+    document.getElementById(id + '_number').innerText = car.RaceNumber;
     document.getElementById(id + '_name').innerText = driver.FirstName.charAt(0) + '. ' + driver.LastName;
-    document.getElementById(id + '_time').innerText = formatTimeDelta(gap_ms);
+    document.getElementById(id + '_time').innerText = car.IsInPit
+                                                    ? 'PIT'
+                                                    : formatTimeDelta(gap_ms);
 }
 
 function setTrackGaps(trackGaps)
