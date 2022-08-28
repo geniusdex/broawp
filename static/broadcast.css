@@ -1,0 +1,87 @@
+body {
+    font-family: 'Open Sans';
+}
+
+div#cars_in_pit {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100px;
+    right: 0;
+    width: 260px;
+}
+
+.car_in_pit_outer {
+    width: 260px;
+    height: 63px;
+    overflow: hidden;
+    transition: height 500ms;
+}
+
+.car_in_pit_outer.hidden {
+    height: 0;
+}
+
+.car_in_pit_outer:not(:last-child) > .car_in_pit {
+    border-bottom: 1px solid #888;
+}
+
+.car_in_pit {
+    position: relative;
+    width: 260px;
+    height: 62px;
+    margin: 0;
+    color: white;
+    background-color: black;
+    transition: margin 500ms;
+}
+
+.car_in_pit.hidden {
+    margin-left: 260px;
+}
+
+.car_in_pit > .car_number {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 100%;
+    font-size: 32px;
+    font-weight: bold;
+    background-color: #f2435b;
+}
+
+.car_in_pit > .driver_name {
+    position: absolute;
+    left: 80px;
+    padding: 4px 10px;
+    font-size: 18px;
+}
+
+.car_in_pit > .position {
+    position: absolute;
+    bottom: 0;
+    left: 80px;
+    padding: 4px 10px;
+}
+
+.car_in_pit > .position {
+    color: #aaa;
+    font-size: 16px;
+}
+
+.car_in_pit > .position > span {
+    color: white;
+    font-size: 24px;
+}
+
+.car_in_pit > .pit_time {
+    position: absolute;
+    bottom: 0;
+    right: 0px;
+    padding: 4px 10px;
+    width: 100px;
+    text-align: right;
+    font-size: 24px;
+}

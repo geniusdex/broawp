@@ -83,7 +83,7 @@ type MsgRealtimeCarUpdate struct {
 	WorldPosX      float32
 	WorldPosY      float32
 	Yaw            float32
-	CarLocation    byte
+	CarLocation    byte // NONE = 0, Track = 1, Pitlan = 2, PitEntry = 3, PitExit = 4
 	SpeedKmh       uint16
 	Position       uint16  // Official P/Q/R position (1 based)
 	CupPosition    uint16  // Official P/Q/R position (1 based)

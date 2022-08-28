@@ -7,6 +7,15 @@ import (
 	"github.com/geniusdex/broawp/accbroadcast"
 )
 
+const (
+	CarLocationUnknown  = accbroadcast.CarLocationUnknown
+	CarLocationTrack    = accbroadcast.CarLocationTrack
+	CarLocationPitLane  = accbroadcast.CarLocationPitLane
+	CarLocationPitEntry = accbroadcast.CarLocationPitEntry
+	CarLocationPitExit  = accbroadcast.CarLocationPitExit
+	CarLocationPitBox   = 5
+)
+
 type Driver struct {
 	FirstName string
 	LastName  string
@@ -38,6 +47,7 @@ type Car struct {
 	CurrentDriverIndex int
 	Drivers            []*Driver
 	IsInPit            bool
+	Location           int // one of the CarLocation... constants
 	Gear               int // R = -1,  N = 0,  1 = 1,  2 = 2,  ...
 	SpeedKmh           int
 	Position           int     // Official P/Q/R position (1-based)
@@ -97,7 +107,13 @@ func (c *Car) UpdateFromEntryList(msg *accbroadcast.MsgEntryListCar) {
 	c.requireTrackPositionUpdate = false
 }
 
-func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate) {
+func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate, state *State) {
+	oldLocation := c.Location
+
+	sendUpdate := (int(msg.DriverIndex) != c.CurrentDriverIndex) ||
+		(int(msg.Position) != c.Position) ||
+		(int(msg.CupPosition) != c.CupPosition)
+
 	c.lastUpdate = time.Now()
 	c.IsConnected = true
 	if (len(c.Drivers) != int(msg.DriverCount)) || (int(msg.DriverIndex) >= len(c.Drivers)) {
@@ -108,6 +124,7 @@ func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate) {
 	c.IsInPit = (msg.CarLocation == accbroadcast.CarLocationPitLane) ||
 		(msg.CarLocation == accbroadcast.CarLocationPitEntry) ||
 		(msg.CarLocation == accbroadcast.CarLocationPitExit)
+	c.Location = int(msg.CarLocation)
 	c.Gear = msg.Gear
 	c.SpeedKmh = int(msg.SpeedKmh)
 	c.Position = int(msg.Position)
@@ -134,6 +151,22 @@ func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate) {
 		c.currentLapPositionTimes = make([]*positionTime, 0, cap(c.lastLapPositionTimes))
 	}
 	c.currentLapPositionTimes = append(c.currentLapPositionTimes, &positionTime{c.SplinePosition, time.Now()})
+
+	if (c.Location == CarLocationPitLane) && (c.SpeedKmh == 0) {
+		c.Location = CarLocationPitBox
+	}
+
+	if sendUpdate {
+		state.CarUpdates <- c
+	}
+
+	if c.Location != oldLocation {
+		state.PitEvents <- &PitEvent{
+			Car:         c,
+			OldLocation: oldLocation,
+			NewLocation: c.Location,
+		}
+	}
 }
 
 func localTimeOfPositionInLap(splinePosition float32, positionTimes []*positionTime) (time.Time, bool) {

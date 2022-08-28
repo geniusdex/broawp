@@ -28,6 +28,10 @@ func (f *frontend) overlayHandler(w http.ResponseWriter, r *http.Request) {
 	f.executeTemplate(w, r, "overlay.html", nil)
 }
 
+func (f *frontend) broadcastHandler(w http.ResponseWriter, r *http.Request) {
+	f.executeTemplate(w, r, "broadcast.html", nil)
+}
+
 func (f *frontend) webSocketHandler(w http.ResponseWriter, r *http.Request) {
 	err := f.websockets.AddConnection(w, r)
 	if err != nil {
@@ -84,6 +88,9 @@ func (f *frontend) sendWebSocketUpdates() {
 
 		case gaps := <-f.state.TrackGapUpdates:
 			f.sendGaps("trackGaps", gaps)
+
+		case pitEvent := <-f.state.PitEvents:
+			f.sendPitEvent("pitEvent", pitEvent)
 		}
 	}
 }
@@ -110,4 +117,27 @@ func (f *frontend) sendGaps(msgType string, gapsIn []accrace.CarGap) {
 		})
 	}
 	f.sendMessageToWebSockets(msgType, gapsOut)
+}
+
+type jsPitEvent struct {
+	Car         *accrace.Car
+	OldLocation string
+	NewLocation string
+}
+
+func (f *frontend) sendPitEvent(msgType string, pitEvent *accrace.PitEvent) {
+	locationToString := map[int]string{
+		accrace.CarLocationUnknown:  "unknown",
+		accrace.CarLocationTrack:    "track",
+		accrace.CarLocationPitLane:  "pit_lane",
+		accrace.CarLocationPitEntry: "pit_entry",
+		accrace.CarLocationPitExit:  "pit_exit",
+		accrace.CarLocationPitBox:   "pit_box",
+	}
+
+	f.sendMessageToWebSockets(msgType, &jsPitEvent{
+		Car:         pitEvent.Car,
+		OldLocation: locationToString[pitEvent.OldLocation],
+		NewLocation: locationToString[pitEvent.NewLocation],
+	})
 }

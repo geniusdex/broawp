@@ -3,6 +3,7 @@ package frontend
 import (
 	"html/template"
 	"log"
+	"mime"
 	"net/http"
 
 	"github.com/geniusdex/broawp/accrace"
@@ -60,7 +61,21 @@ func (f *frontend) executeTemplate(w http.ResponseWriter, r *http.Request, name 
 	}
 }
 
+func addMimeTypes() error {
+	if err := mime.AddExtensionType(".js", "text/javascript"); err != nil {
+		return err
+	}
+
+	if err := mime.AddExtensionType(".mjs", "text/javascript"); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Run(state *accrace.State) error {
+	addMimeTypes()
+
 	f := &frontend{
 		state:        state,
 		templateData: &templateData{},
@@ -70,6 +85,7 @@ func Run(state *accrace.State) error {
 	go f.sendWebSocketUpdates()
 
 	http.HandleFunc("/", f.indexHandler)
+	http.HandleFunc("/broadcast", f.broadcastHandler)
 	http.HandleFunc("/disconnect", f.disconnectHandler)
 	http.HandleFunc("/overlay", f.overlayHandler)
 	http.HandleFunc("/ws", f.webSocketHandler)

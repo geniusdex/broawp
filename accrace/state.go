@@ -49,6 +49,12 @@ const (
 	carUpdateTimeout                      = 10 * time.Second
 )
 
+type PitEvent struct {
+	Car         *Car
+	OldLocation int // One of the CarLocation... constants
+	NewLocation int // One of the CarLocation... constants
+}
+
 type State struct {
 	client               *accbroadcast.Client
 	connectionId         uint32
@@ -76,6 +82,8 @@ type State struct {
 	CurrentLapUpdates    chan time.Duration
 	LapDeltaUpdates      chan time.Duration
 	TrackGapUpdates      chan []CarGap
+
+	PitEvents chan *PitEvent
 }
 
 func NewState(client *accbroadcast.Client) *State {
@@ -95,6 +103,7 @@ func NewState(client *accbroadcast.Client) *State {
 		CurrentLapUpdates:    make(chan time.Duration, 1024),
 		LapDeltaUpdates:      make(chan time.Duration, 1024),
 		TrackGapUpdates:      make(chan []CarGap, 1024),
+		PitEvents:            make(chan *PitEvent, 1024),
 	}
 
 	go state.handleIncomingMessages()
@@ -260,7 +269,7 @@ func (s *State) handleRealtimeCarUpdate(msg *accbroadcast.MsgRealtimeCarUpdate) 
 	}
 	carId := int(msg.CarIndex)
 	if car, ok := s.Cars[carId]; ok {
-		car.UpdateFromRealtime(msg)
+		car.UpdateFromRealtime(msg, s)
 	} else {
 		s.requestEntryList()
 	}
