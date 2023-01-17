@@ -29,8 +29,4 @@ func main() {
 	if err := frontend.Run(state); err != nil {
 		log.Printf("Error running frontend: %v", err)
 	}
-
-	if err := client.Unregister(); err != nil {
-		log.Fatalf("cannot unregister: %v", err)
-	}
 }

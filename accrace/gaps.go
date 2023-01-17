@@ -16,12 +16,6 @@ type CarGap struct {
 	GapBehind   time.Duration
 }
 
-func (s *State) updateGapsEvery(interval time.Duration) {
-	for range time.Tick(interval) {
-		s.updateGaps()
-	}
-}
-
 func (s *State) updateGaps() {
 	cars := make([]*Car, 0, len(s.Cars))
 	for _, car := range s.Cars {

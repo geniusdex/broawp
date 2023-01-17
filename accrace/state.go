@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/geniusdex/broawp/accbroadcast"
+	"github.com/richardwilkes/toolbox/atexit"
 )
 
 type SessionType byte
@@ -84,6 +85,8 @@ type State struct {
 	TrackGapUpdates      chan []CarGap
 
 	PitEvents chan *PitEvent
+
+	atexitID int
 }
 
 func NewState(client *accbroadcast.Client) *State {
@@ -107,14 +110,25 @@ func NewState(client *accbroadcast.Client) *State {
 	}
 
 	go state.handleIncomingMessages()
-	go state.updateGapsEvery(gapsCalculationPeriod)
-	go state.performMaintenanceEvery(maintenancePeriod)
+
+	state.atexitID = atexit.Register(func() {
+		atexit.Unregister(state.atexitID)
+
+		state.Close()
+
+		// Sleep a while to get the Unregister message out before we close the socket
+		time.Sleep(500 * time.Millisecond)
+
+		client.Close()
+	})
 
 	return state
 }
 
 func (s *State) Close() {
-	s.client.Unregister()
+	if err := s.client.Unregister(s.connectionId); err != nil {
+		log.Printf("Error while trying to unregister from ACC: %v", err)
+	}
 }
 
 func (s *State) Burst() {
@@ -193,25 +207,42 @@ func (s *State) setLapDelta(delta time.Duration) {
 }
 
 func (s *State) handleIncomingMessages() {
-	for {
-		raw, ok := <-s.client.IncomingMessages
-		if !ok {
-			break
-		}
+	gapUpdatesTicker := time.NewTicker(gapsCalculationPeriod)
+	defer gapUpdatesTicker.Stop()
 
-		if msg, ok := raw.(*accbroadcast.MsgRegistrationResult); ok {
-			s.handleRegistrationResult(msg)
-		} else if msg, ok := raw.(*accbroadcast.MsgEntryList); ok {
-			s.handleEntryList(msg)
-		} else if msg, ok := raw.(*accbroadcast.MsgEntryListCar); ok {
-			s.handleEntryListCar(msg)
-		} else if msg, ok := raw.(*accbroadcast.MsgRealtimeUpdate); ok {
-			s.handleRealtimeUpdate(msg)
-		} else if msg, ok := raw.(*accbroadcast.MsgRealtimeCarUpdate); ok {
-			s.handleRealtimeCarUpdate(msg)
-		} else {
-			log.Printf("Received unhandled message: %#v", raw)
+	maintenanceTicker := time.NewTicker(maintenancePeriod)
+	defer maintenanceTicker.Stop()
+
+	for {
+		select {
+		case raw, ok := <-s.client.IncomingMessages:
+			if !ok {
+				return
+			}
+			s.handleMessage(raw)
+
+		case <-gapUpdatesTicker.C:
+			s.updateGaps()
+
+		case <-maintenanceTicker.C:
+			s.performMaintenance()
 		}
+	}
+}
+
+func (s *State) handleMessage(raw interface{}) {
+	if msg, ok := raw.(*accbroadcast.MsgRegistrationResult); ok {
+		s.handleRegistrationResult(msg)
+	} else if msg, ok := raw.(*accbroadcast.MsgEntryList); ok {
+		s.handleEntryList(msg)
+	} else if msg, ok := raw.(*accbroadcast.MsgEntryListCar); ok {
+		s.handleEntryListCar(msg)
+	} else if msg, ok := raw.(*accbroadcast.MsgRealtimeUpdate); ok {
+		s.handleRealtimeUpdate(msg)
+	} else if msg, ok := raw.(*accbroadcast.MsgRealtimeCarUpdate); ok {
+		s.handleRealtimeCarUpdate(msg)
+	} else {
+		log.Printf("Received unhandled message: %#v", raw)
 	}
 }
 
@@ -282,12 +313,6 @@ func (s *State) requestEntryList() {
 		if err := s.client.RequestEntryList(s.connectionId); err != nil {
 			log.Printf("Failed to request entry list: %v", err)
 		}
-	}
-}
-
-func (s *State) performMaintenanceEvery(interval time.Duration) {
-	for range time.Tick(interval) {
-		s.performMaintenance()
 	}
 }
 

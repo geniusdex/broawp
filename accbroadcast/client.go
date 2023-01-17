@@ -5,8 +5,6 @@ import (
 	"log"
 	"net"
 	"time"
-
-	"github.com/richardwilkes/toolbox/atexit"
 )
 
 type Client struct {
@@ -14,8 +12,6 @@ type Client struct {
 
 	conn   *net.UDPConn
 	parser *messageParser
-
-	atexitID int
 }
 
 func NewClient(host string, port int) (*Client, error) {
@@ -36,19 +32,6 @@ func NewClient(host string, port int) (*Client, error) {
 		conn:             conn,
 		parser:           newMessageParser(),
 	}
-
-	client.atexitID = atexit.Register(func() {
-		atexit.Unregister(client.atexitID)
-
-		if err := client.Unregister(); err != nil {
-			log.Printf("Error while trying to unregister from ACC: %v", err)
-		}
-
-		// Sleep a while to get the Unregister message out before we close the socket
-		time.Sleep(500 * time.Millisecond)
-
-		client.Close()
-	})
 
 	go client.readMessages()
 
@@ -74,9 +57,10 @@ func (c *Client) Register(displayName string, connectionPassword string, realtim
 	return c.sendMessage(mb.Bytes())
 }
 
-func (c *Client) Unregister() error {
+func (c *Client) Unregister(connectionId uint32) error {
 	mb := newMessageBuilder()
 	mb.WriteByte(outUnregisterCommandApplication)
+	mb.WriteUint32(connectionId)
 
 	return c.sendMessage(mb.Bytes())
 }
