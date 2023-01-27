@@ -110,9 +110,14 @@ func (c *Car) UpdateFromEntryList(msg *accbroadcast.MsgEntryListCar) {
 func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate, state *State) {
 	oldLocation := c.Location
 
+	msgIsInPit := (msg.CarLocation == accbroadcast.CarLocationPitLane) ||
+		(msg.CarLocation == accbroadcast.CarLocationPitEntry) ||
+		(msg.CarLocation == accbroadcast.CarLocationPitExit)
+
 	sendUpdate := (int(msg.DriverIndex) != c.CurrentDriverIndex) ||
 		(int(msg.Position) != c.Position) ||
-		(int(msg.CupPosition) != c.CupPosition)
+		(int(msg.CupPosition) != c.CupPosition) ||
+		(msgIsInPit != c.IsInPit)
 
 	c.lastUpdate = time.Now()
 	c.IsConnected = true
@@ -121,9 +126,7 @@ func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate, state *
 	} else {
 		c.CurrentDriverIndex = int(msg.DriverIndex)
 	}
-	c.IsInPit = (msg.CarLocation == accbroadcast.CarLocationPitLane) ||
-		(msg.CarLocation == accbroadcast.CarLocationPitEntry) ||
-		(msg.CarLocation == accbroadcast.CarLocationPitExit)
+	c.IsInPit = msgIsInPit
 	c.Location = int(msg.CarLocation)
 	c.Gear = msg.Gear
 	c.SpeedKmh = int(msg.SpeedKmh)
