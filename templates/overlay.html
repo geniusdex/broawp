@@ -6,6 +6,9 @@
 body {
     margin: 0px;
     padding: 0px;
+    width: 1600px;
+    height: 900px;
+    overflow: hidden;
 }
 
 .label {
@@ -152,6 +155,14 @@ body {
     text-shadow: -2px 2px 0px #323A36;
 }
 
+.nearby_laps_ahead {
+    color: #faa;
+}
+
+.nearby_laps_behind {
+    color: #bbf;
+}
+
 .nearby_number {
     position: absolute;
     top: 5px;
@@ -166,6 +177,11 @@ body {
     left: 100px;
 }
 
+.nearby_name_laps {
+    font-size: 60%;
+    vertical-align: top;
+}
+
 .nearby_time {
     position: absolute;
     top: 5px;
@@ -174,6 +190,90 @@ body {
     overflow: hidden;
     text-align: right;
 }
+
+#standings_container {
+    visibility: hidden;
+    position: absolute;
+    top: 10px;
+    left: 1390px;
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+}
+
+#standings {
+    height: 863px;
+    overflow: hidden;
+}
+
+.standings_header {
+    position: relative;
+    height: 27px;
+    font-family: sans-serif;
+    font-size: 18px;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.standings_header_text {
+    position: absolute;
+    top: 3px;
+    left: 105px;
+}
+
+.standings {
+    position: relative;
+    height: 36px;
+}
+
+.standings svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.standings_me {
+    font-size: 22px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.standings_others {
+    font-size: 22px;
+    font-family: sans-serif;
+    color: white;
+    text-shadow: -2px 2px 0px #323A36;
+}
+
+.standings_position {
+    position: absolute;
+    top: 5px;
+    left: 30px;
+    width: 50px;
+    text-align: right;
+}
+
+.standings_position::after {
+    content: ".";
+}
+
+.standings_number {
+    position: absolute;
+    top: 5px;
+    left: 80px;
+    width: 50px;
+    text-align: right;
+}
+
+.standings_name {
+    position: absolute;
+    top: 5px;
+    left: 145px;
+}
+
+
+
 </style>
 </head>
 <body>
@@ -276,6 +376,46 @@ body {
                 l0,1 l380,0 l0,-1
                 " fill="#323A36" stroke="none" stroke-width="0" />
     </symbol>
+
+    <!-- Standings -->
+    <symbol id="standings_header" width="825" height="45">
+        <path d="M85,3
+                l-18,27 l174,0 l18,-27 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M90,0
+                l-18,27 l174,0 l18,-27 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+        <!-- <path d="M72,26
+                l0,1 l380,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" /> -->
+    </symbol>
+    <symbol id="standings_me" width="825" height="45">
+        <path d="M47,0
+                l-26,39 l404,0 l22,-39 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M50,0
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+        <path d="M50,0
+                l0,1 l380,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
+    <symbol id="standings_others" width="825" height="45">
+        <path d="M45,3
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#ff641a" stroke="none" stroke-width="0" />
+        <path d="M50,0
+                l-24,36 l404,0 l24,-36 l10,0
+                " fill="#657484" stroke="none" stroke-width="0" />
+        <path d="M50,0
+                l0,1 l380,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
+    <symbol id="standings_not_top" width="825" height="45">
+        <path d="M50,0
+                l0,1 l380,0 l0,-1
+                " fill="#323A36" stroke="none" stroke-width="0" />
+    </symbol>
 </svg>
 <div id="session_type" class="label">-</div>
 <div id="time_remaining" class="label2">-:--:--</div>
@@ -313,47 +453,280 @@ body {
             <svg width="825" height="45" version="2.0"><use href="#nearby_header" /></svg>
             <div class="nearby_header_text">Gaps on Track</div>
         </div>
-        <div class="nearby nearby_others">
+        <div id="nearby_ahead3" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others_top" /></svg>
             <div class="nearby_number" id="nearby_ahead3_number"></div>
-            <div class="nearby_name" id="nearby_ahead3_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_ahead3_name"></span>
+                <span class="nearby_name_laps" id="nearby_ahead3_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_ahead3_time"></div>
         </div>
-        <div class="nearby nearby_others">
+        <div id="nearby_ahead2" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_ahead2_number"></div>
-            <div class="nearby_name" id="nearby_ahead2_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_ahead2_name"></span>
+                <span class="nearby_name_laps" id="nearby_ahead2_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_ahead2_time"></div>
         </div>
-        <div class="nearby nearby_others">
+        <div id="nearby_ahead1" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_ahead1_number"></div>
-            <div class="nearby_name" id="nearby_ahead1_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_ahead1_name"></span>
+                <span class="nearby_name_laps" id="nearby_ahead1_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_ahead1_time"></div>
         </div>
-        <div class="nearby nearby_me">
+        <div id="nearby_me" class="nearby nearby_me">
             <svg width="825" height="45" version="2.0"><use href="#nearby_me" /></svg>
             <div class="nearby_number" id="nearby_me_number"></div>
-            <div class="nearby_name" id="nearby_me_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_me_name"></span>
+                <span class="nearby_name_laps" id="nearby_me_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_me_time"></div>
         </div>
-        <div class="nearby nearby_others">
+        <div id="nearby_behind1" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_behind1_number"></div>
-            <div class="nearby_name" id="nearby_behind1_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_behind1_name"></span>
+                <span class="nearby_name_laps" id="nearby_behind1_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_behind1_time"></div>
         </div>
-        <div class="nearby nearby_others">
+        <div id="nearby_behind2" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_behind2_number"></div>
-            <div class="nearby_name" id="nearby_behind2_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_behind2_name"></span>
+                <span class="nearby_name_laps" id="nearby_behind2_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_behind2_time"></div>
         </div>
-        <div class="nearby nearby_others">
+        <div id="nearby_behind3" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_behind3_number"></div>
-            <div class="nearby_name" id="nearby_behind3_name"></div>
+            <div class="nearby_name">
+                <span class="nearby_name_name" id="nearby_behind3_name"></span>
+                <span class="nearby_name_laps" id="nearby_behind3_laps"></span>
+            </div>
             <div class="nearby_time" id="nearby_behind3_time"></div>
+        </div>
+    </div>
+</div>
+<div id="standings_container">
+    <div class="standings_header">
+        <svg width="210" height="45" version="2.0"><use href="#standings_header" /></svg>
+        <div class="standings_header_text">Standings</div>
+    </div>
+    <div id="standings">
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">1</div>
+            <div class="standings_number">404</div>
+            <div class="standings_name">XVW</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">2</div>
+            <div class="standings_number">5</div>
+            <div class="standings_name">BAM</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_me" /></svg>
+            <div class="standings_position">3</div>
+            <div class="standings_number">418</div>
+            <div class="standings_name">BOO</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">4</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">5</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">6</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">7</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">8</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">9</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">10</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">11</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">12</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">13</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">14</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">15</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">16</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">17</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">18</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">19</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">20</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">21</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">22</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">23</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">24</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">25</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">26</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">27</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">28</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">29</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">30</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">31</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">32</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">33</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
+        </div>
+        <div class="standings standings_others">
+            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
+            <div class="standings_position">34</div>
+            <div class="standings_number">69</div>
+            <div class="standings_name">PLR</div>
         </div>
     </div>
 </div>
@@ -469,6 +842,53 @@ function redrawCurrentLapTime(timestamp)
 
 window.requestAnimationFrame(redrawCurrentLapTime);
 
+function carIsNrOfLapsAheadOfMe(currentId, hasAlreadyOvertaken)
+{
+    const current = g_cars[currentId];
+    const me = g_cars[g_focusedCarId];
+
+    const currentLaps = current.Laps + current.SplinePosition;
+    const myLaps = me.Laps + me.SplinePosition;
+
+    let lapsAhead = currentLaps - myLaps;
+    if (lapsAhead >= 0 && !hasAlreadyOvertaken)
+    {
+        lapsAhead += 1;
+    }
+    if (lapsAhead <= 0 && hasAlreadyOvertaken)
+    {
+        lapsAhead -= 1;
+    }
+    return Math.trunc(lapsAhead);
+}
+
+function updateLapsGap(id, lapsAhead)
+{
+    if (lapsAhead > 0)
+    {
+        document.getElementById(id).classList.add('nearby_laps_ahead');
+        document.getElementById(id).classList.remove('nearby_laps_behind');
+
+        const text = `+${lapsAhead} lap${(lapsAhead == 1) ? '' : 's'}`;
+        document.getElementById(id + '_laps').innerText = text;
+    }
+    else if (lapsAhead < 0)
+    {
+        document.getElementById(id).classList.remove('nearby_laps_ahead');
+        document.getElementById(id).classList.add('nearby_laps_behind');
+
+        const text = `${lapsAhead} lap${(lapsAhead == -1) ? '' : 's'}`;
+        document.getElementById(id + '_laps').innerText = text;
+    }
+    else
+    {
+        document.getElementById(id).classList.remove('nearby_laps_ahead');
+        document.getElementById(id).classList.remove('nearby_laps_behind');
+
+        document.getElementById(id + '_laps').innerText = '';
+    }
+}
+
 function updateTrackGap(id, carId, gap_ms)
 {
     const car = g_cars[carId];
@@ -479,6 +899,11 @@ function updateTrackGap(id, carId, gap_ms)
     document.getElementById(id + '_time').innerText = car.IsInPit
                                                     ? 'PIT'
                                                     : formatTimeDelta(gap_ms);
+
+    if (carId !== g_focusedCarId)
+    {
+        updateLapsGap(id, carIsNrOfLapsAheadOfMe(carId, (gap_ms > 0)));
+    }
 }
 
 function setTrackGaps(trackGaps)
@@ -487,6 +912,12 @@ function setTrackGaps(trackGaps)
     for (const gap of trackGaps)
     {
         gaps[gap.CarId] = gap;
+        if (gap.CarId in g_cars)
+        {
+            let car = g_cars[gap.CarId];
+            car.Laps = gap.Laps;
+            car.SplinePosition = gap.SplinePosition;
+        }
     }
     
     if (g_focusedCarId in gaps)
@@ -512,6 +943,11 @@ function setTrackGaps(trackGaps)
         updateTrackGap('nearby_behind2', behind1.CarIdBehind, -gap_behind2);
         updateTrackGap('nearby_behind3', behind2.CarIdBehind, -gap_behind3);
     }
+}
+
+function handlePitEvent(event)
+{
+    // Ignore pit events
 }
 
 function webSocketEndpoint()
@@ -578,6 +1014,19 @@ newHandler('lastlaptime_ms', makeSetLapTime('laptime_last'));
 newHandler('currentlaptime_ms', setCurrentLapTime);
 newHandler('lapdelta_ms', setLapDelta);
 newHandler('trackGaps', setTrackGaps);
+newHandler('pitEvent', handlePitEvent);
+
+
+// let g_standingsTop = 0;
+
+// var g_lastStandingsUpdate = performance.now()
+// function scrollStandings(timestamp)
+// {
+//     document.getElementById('standings').scrollTop = g_standingsTop++;
+//     window.requestAnimationFrame(scrollStandings);
+// }
+
+// window.requestAnimationFrame(scrollStandings);
 
 </script>
 </html>

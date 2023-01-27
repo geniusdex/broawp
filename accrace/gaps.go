@@ -14,6 +14,9 @@ type CarGap struct {
 
 	CarIdBehind int
 	GapBehind   time.Duration
+
+	Laps           int
+	SplinePosition float32 // Track position between 0.0 and 1.0
 }
 
 func (s *State) updateGaps() {
@@ -64,11 +67,13 @@ func (s *State) sendGapUpdates() {
 	for _, car := range s.Cars {
 		if (car.nextOnTrack != nil) && (car.previousOnTrack != nil) {
 			trackGaps = append(trackGaps, CarGap{
-				CarId:       car.CarId,
-				CarIdAhead:  car.nextOnTrack.car.CarId,
-				GapAhead:    car.nextOnTrack.timeGap,
-				CarIdBehind: car.previousOnTrack.car.CarId,
-				GapBehind:   car.previousOnTrack.timeGap,
+				CarId:          car.CarId,
+				CarIdAhead:     car.nextOnTrack.car.CarId,
+				GapAhead:       car.nextOnTrack.timeGap,
+				CarIdBehind:    car.previousOnTrack.car.CarId,
+				GapBehind:      car.previousOnTrack.timeGap,
+				Laps:           car.Laps,
+				SplinePosition: car.SplinePosition,
 			})
 		}
 	}

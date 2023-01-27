@@ -103,17 +103,22 @@ type jsCarGap struct {
 
 	CarIdBehind  int
 	GapBehind_ms int
+
+	Laps           int
+	SplinePosition float32
 }
 
 func (f *frontend) sendGaps(msgType string, gapsIn []accrace.CarGap) {
 	gapsOut := make([]jsCarGap, 0, len(gapsIn))
 	for _, gap := range gapsIn {
 		gapsOut = append(gapsOut, jsCarGap{
-			CarId:        gap.CarId,
-			CarIdAhead:   gap.CarIdAhead,
-			GapAhead_ms:  int(gap.GapAhead) / int(time.Millisecond),
-			CarIdBehind:  gap.CarIdBehind,
-			GapBehind_ms: int(gap.GapBehind) / int(time.Millisecond),
+			CarId:          gap.CarId,
+			CarIdAhead:     gap.CarIdAhead,
+			GapAhead_ms:    int(gap.GapAhead) / int(time.Millisecond),
+			CarIdBehind:    gap.CarIdBehind,
+			GapBehind_ms:   int(gap.GapBehind) / int(time.Millisecond),
+			Laps:           gap.Laps,
+			SplinePosition: gap.SplinePosition,
 		})
 	}
 	f.sendMessageToWebSockets(msgType, gapsOut)
