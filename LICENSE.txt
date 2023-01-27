@@ -1,7 +1,7 @@
-Copyright 2022 Pieter Bootsma
+Copyright 2022-2023 Pieter Bootsma
 
-It is not allowed to re-use the CSS for any purpose other than private testing. The rest of this
-archived is covered by this license:
+It is not allowed to re-use the CSS or SVG in this repository for any purpose other than private
+testing. The rest of this archive is covered by this license:
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
 provided that the following conditions are met:
