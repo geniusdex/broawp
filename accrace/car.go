@@ -67,8 +67,9 @@ type Car struct {
 	lastLapPositionTimes    []*positionTime
 	currentLapPositionTimes []*positionTime
 
-	nextOnTrack     *carGap
-	previousOnTrack *carGap
+	// Gaps indexed on CarId of other car
+	gapsAhead  map[int]time.Duration
+	gapsBehind map[int]time.Duration
 }
 
 func NewLap(msg *accbroadcast.MsgLap) *Lap {
@@ -86,6 +87,8 @@ func NewCar(msg *accbroadcast.MsgEntryListCar) *Car {
 		IsConnected:             false,
 		lastLapPositionTimes:    make([]*positionTime, 0),
 		currentLapPositionTimes: make([]*positionTime, 0),
+		gapsAhead:               make(map[int]time.Duration),
+		gapsBehind:              make(map[int]time.Duration),
 	}
 	car.UpdateFromEntryList(msg)
 	return car

@@ -2,59 +2,38 @@ package accrace
 
 import (
 	"log"
-	"sort"
 	"time"
 )
 
 type CarGap struct {
 	CarId int
 
-	CarIdAhead int
-	GapAhead   time.Duration
-
-	CarIdBehind int
-	GapBehind   time.Duration
-
 	Laps           int
 	SplinePosition float32 // Track position between 0.0 and 1.0
+
+	GapsAhead  map[int]time.Duration
+	GapsBehind map[int]time.Duration
 }
 
 func (s *State) updateGaps() {
-	cars := make([]*Car, 0, len(s.Cars))
-	for _, car := range s.Cars {
-		cars = append(cars, car)
-	}
-
-	sort.Slice(cars, func(i, j int) bool {
-		if cars[i].IsConnected != cars[j].IsConnected {
-			return cars[i].IsConnected
-		}
-		return cars[i].SplinePosition < cars[j].SplinePosition
-	})
-
-	if len(cars) >= 2 {
-		for currentIndex, current := range cars {
-			nextIndex := (currentIndex + 1) % len(cars)
-			next := cars[nextIndex]
-
-			if !next.IsConnected {
-				nextIndex = 0
-				next = cars[nextIndex]
-			}
-
-			if (len(current.currentLapPositionTimes) > 0) && (len(next.currentLapPositionTimes) > 0) {
-				// Find when the next car was last at my position
-				currentPosition := current.currentLapPositionTimes[len(current.currentLapPositionTimes)-1]
-				nextWasLastAtCurrentPosition, ok := next.lastLocalTimeOfPosition(currentPosition.splinePosition)
-				if ok {
-					gap := currentPosition.localTime.Sub(nextWasLastAtCurrentPosition)
-					current.nextOnTrack = &carGap{next, gap}
-					next.previousOnTrack = &carGap{current, gap}
+	for _, a := range s.Cars {
+		for _, b := range s.Cars {
+			if a.CarId != b.CarId {
+				// How far is B ahead of A?
+				if (a.IsConnected && b.IsConnected &&
+					len(a.currentLapPositionTimes) > 0) && (len(b.currentLapPositionTimes) > 0) {
+					// Find when B was last at position of A
+					currentPosition := a.currentLapPositionTimes[len(a.currentLapPositionTimes)-1]
+					bWasLastAtCurrentPosition, ok := b.lastLocalTimeOfPosition(currentPosition.splinePosition)
+					if ok {
+						gap := currentPosition.localTime.Sub(bWasLastAtCurrentPosition)
+						a.gapsAhead[b.CarId] = gap
+						b.gapsBehind[a.CarId] = gap
+					}
+				} else {
+					delete(a.gapsAhead, b.CarId)
+					delete(b.gapsBehind, a.CarId)
 				}
-			}
-
-			if nextIndex == 0 {
-				break
 			}
 		}
 	}
@@ -65,15 +44,13 @@ func (s *State) updateGaps() {
 func (s *State) sendGapUpdates() {
 	trackGaps := make([]CarGap, 0, len(s.Cars))
 	for _, car := range s.Cars {
-		if (car.nextOnTrack != nil) && (car.previousOnTrack != nil) {
+		if car.IsConnected {
 			trackGaps = append(trackGaps, CarGap{
 				CarId:          car.CarId,
-				CarIdAhead:     car.nextOnTrack.car.CarId,
-				GapAhead:       car.nextOnTrack.timeGap,
-				CarIdBehind:    car.previousOnTrack.car.CarId,
-				GapBehind:      car.previousOnTrack.timeGap,
 				Laps:           car.Laps,
 				SplinePosition: car.SplinePosition,
+				GapsAhead:      car.gapsAhead,
+				GapsBehind:     car.gapsBehind,
 			})
 		}
 	}

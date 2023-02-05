@@ -71,6 +71,7 @@ type State struct {
 	FocusedLapDelta    time.Duration
 	TrackGaps          []CarGap
 
+	// Indexed on CarId
 	Cars map[int]*Car
 
 	SessionTypeUpdates   chan string

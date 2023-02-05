@@ -767,7 +767,7 @@ function formatLapTime(time_ms)
 
 function formatTimeDelta(time_ms)
 {
-    if (time_ms == 0)
+    if (typeof time_ms === 'undefined' || time_ms == 0 || time_ms != time_ms)
     {
         return '';
     }
@@ -908,40 +908,47 @@ function updateTrackGap(id, carId, gap_ms)
 
 function setTrackGaps(trackGaps)
 {
-    gaps = {};
     for (const gap of trackGaps)
     {
-        gaps[gap.CarId] = gap;
         if (gap.CarId in g_cars)
         {
             let car = g_cars[gap.CarId];
             car.Laps = gap.Laps;
             car.SplinePosition = gap.SplinePosition;
+            car.GapsAhead_ms = gap.GapsAhead_ms;
+            car.GapsBehind_ms = gap.GapsBehind_ms;
         }
     }
-    
-    if (g_focusedCarId in gaps)
+
+    updateNearbyCars(trackGaps);
+}
+
+Array.prototype.atWrapped = function(i) { return this.at(i % this.length); };
+
+function updateNearbyCars(trackGaps)
+{
+    trackGaps.sort((a, b) => a.SplinePosition - b.SplinePosition);
+
+    for (let i = 0; i < trackGaps.length; i++)
     {
-        const current = gaps[g_focusedCarId];
-        const ahead1 = gaps[current.CarIdAhead];
-        const ahead2 = gaps[ahead1.CarIdAhead];
-        const behind1 = gaps[current.CarIdBehind];
-        const behind2 = gaps[behind1.CarIdBehind];
+        if (trackGaps[i].CarId == g_focusedCarId)
+        {
+            const current = g_cars[g_focusedCarId];
+            const ahead1 = trackGaps.atWrapped(i+1).CarId;
+            const ahead2 = trackGaps.atWrapped(i+2).CarId;
+            const ahead3 = trackGaps.atWrapped(i+3).CarId;
+            const behind1 = trackGaps.atWrapped(i-1).CarId;
+            const behind2 = trackGaps.atWrapped(i-2).CarId;
+            const behind3 = trackGaps.atWrapped(i-3).CarId;
 
-        const gap_ahead1 = current.GapAhead_ms;
-        const gap_ahead2 = gap_ahead1 + ahead1.GapAhead_ms;
-        const gap_ahead3 = gap_ahead2 + ahead2.GapAhead_ms;
-        const gap_behind1 = current.GapBehind_ms;
-        const gap_behind2 = gap_behind1 + behind1.GapBehind_ms;
-        const gap_behind3 = gap_behind2 + behind2.GapBehind_ms;
-
-        updateTrackGap('nearby_ahead3', ahead2.CarIdAhead, gap_ahead3);
-        updateTrackGap('nearby_ahead2', ahead1.CarIdAhead, gap_ahead2);
-        updateTrackGap('nearby_ahead1', current.CarIdAhead, gap_ahead1);
-        updateTrackGap('nearby_me', current.CarId, 0);
-        updateTrackGap('nearby_behind1', current.CarIdBehind, -gap_behind1);
-        updateTrackGap('nearby_behind2', behind1.CarIdBehind, -gap_behind2);
-        updateTrackGap('nearby_behind3', behind2.CarIdBehind, -gap_behind3);
+            updateTrackGap('nearby_ahead3', ahead3, current.GapsAhead_ms[ahead3]);
+            updateTrackGap('nearby_ahead2', ahead2, current.GapsAhead_ms[ahead2]);
+            updateTrackGap('nearby_ahead1', ahead1, current.GapsAhead_ms[ahead1]);
+            updateTrackGap('nearby_me', current.CarId, 0);
+            updateTrackGap('nearby_behind1', behind1, -current.GapsBehind_ms[behind1]);
+            updateTrackGap('nearby_behind2', behind2, -current.GapsBehind_ms[behind2]);
+            updateTrackGap('nearby_behind3', behind3, -current.GapsBehind_ms[behind3]);
+        }
     }
 }
 
