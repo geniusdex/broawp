@@ -192,22 +192,24 @@ body {
 }
 
 #standings_container {
-    visibility: hidden;
     position: absolute;
-    top: 10px;
-    left: 1390px;
-    width: 210px;
+    top: 280px;
+    left: 1310px;
+    width: 290px;
     display: flex;
     flex-direction: column;
 }
 
 #standings {
-    height: 863px;
+    height: 539px;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .standings_header {
     position: relative;
+    margin-left: 70px;
+    width: 220px;
     height: 27px;
     font-family: sans-serif;
     font-size: 18px;
@@ -218,7 +220,7 @@ body {
 .standings_header_text {
     position: absolute;
     top: 3px;
-    left: 105px;
+    left: 110px;
 }
 
 .standings {
@@ -261,7 +263,7 @@ body {
 .standings_number {
     position: absolute;
     top: 5px;
-    left: 80px;
+    left: 70px;
     width: 50px;
     text-align: right;
 }
@@ -269,7 +271,16 @@ body {
 .standings_name {
     position: absolute;
     top: 5px;
-    left: 145px;
+    left: 135px;
+    width: 50px;
+}
+
+.standings_gap {
+    position: absolute;
+    top: 5px;
+    left: 180px;
+    width: 90px;
+    text-align: right;
 }
 
 
@@ -520,214 +531,10 @@ body {
 </div>
 <div id="standings_container">
     <div class="standings_header">
-        <svg width="210" height="45" version="2.0"><use href="#standings_header" /></svg>
+        <svg width="220" height="45" version="2.0"><use href="#standings_header" /></svg>
         <div class="standings_header_text">Standings</div>
     </div>
     <div id="standings">
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">1</div>
-            <div class="standings_number">404</div>
-            <div class="standings_name">XVW</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">2</div>
-            <div class="standings_number">5</div>
-            <div class="standings_name">BAM</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_me" /></svg>
-            <div class="standings_position">3</div>
-            <div class="standings_number">418</div>
-            <div class="standings_name">BOO</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">4</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">5</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">6</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">7</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">8</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">9</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">10</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">11</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">12</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">13</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">14</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">15</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">16</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">17</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">18</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">19</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">20</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">21</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">22</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">23</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">24</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">25</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">26</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">27</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">28</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">29</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">30</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">31</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">32</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">33</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
-        <div class="standings standings_others">
-            <svg width="210" height="45" version="2.0"><use href="#standings_others" /></svg>
-            <div class="standings_position">34</div>
-            <div class="standings_number">69</div>
-            <div class="standings_name">PLR</div>
-        </div>
     </div>
 </div>
 </body>
@@ -765,19 +572,19 @@ function formatLapTime(time_ms)
     return m.toString() + ':' + s.toString().padStart(2, '0') + '.' + ms.toString().padStart(3, '0');
 }
 
-function formatTimeDelta(time_ms)
+function formatTimeDelta(time_ms, nrDigits = 2, addSign = true)
 {
     if (typeof time_ms === 'undefined' || time_ms == 0 || time_ms != time_ms)
     {
         return '';
     }
 
-    var sign = (time_ms < 0) ? '-' : '+';
+    var sign = addSign ? ((time_ms < 0) ? '-' : '+') : '';
     var absTime_ms = Math.abs(time_ms);
     var ms = absTime_ms % 1000;
     var s = (absTime_ms - ms) / 1000;
 
-    return sign + s.toString() + '.' + ms.toString().padStart(3, '0').substr(0, 2);
+    return sign + s.toString() + '.' + ms.toString().padStart(3, '0').substr(0, nrDigits);
 }
 
 function setSessionType(sessionType)
@@ -915,12 +722,14 @@ function setTrackGaps(trackGaps)
             let car = g_cars[gap.CarId];
             car.Laps = gap.Laps;
             car.SplinePosition = gap.SplinePosition;
+            car.ExactLaps = car.Laps + car.SplinePosition;
             car.GapsAhead_ms = gap.GapsAhead_ms;
             car.GapsBehind_ms = gap.GapsBehind_ms;
         }
     }
 
     updateNearbyCars(trackGaps);
+    updateStandings();
 }
 
 Array.prototype.atWrapped = function(i) { return this.at(i % this.length); };
@@ -948,6 +757,112 @@ function updateNearbyCars(trackGaps)
             updateTrackGap('nearby_behind1', behind1, -current.GapsBehind_ms[behind1]);
             updateTrackGap('nearby_behind2', behind2, -current.GapsBehind_ms[behind2]);
             updateTrackGap('nearby_behind3', behind3, -current.GapsBehind_ms[behind3]);
+        }
+    }
+}
+
+let g_standingsEl = document.getElementById('standings');
+let g_standingsFocusedCarIndex = null;
+
+function ensureNrOfStandingsNodes(nr)
+{
+    while (g_standingsEl.childElementCount > nr)
+    {
+        g_standingsEl.lastElementChild.remove();
+    }
+
+    while (g_standingsEl.childElementCount < nr)
+    {
+        let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svgEl.setAttribute('width', 290);
+        svgEl.setAttribute('height', 45);
+        svgEl.setAttribute('version', '2.0');
+        let svgUseEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        svgUseEl.setAttribute('href', '#standings_others');
+        svgEl.append(svgUseEl);
+
+        let positionEl = document.createElement('div');
+        positionEl.classList.add('standings_position');
+
+        let numberEl = document.createElement('div');
+        numberEl.classList.add('standings_number');
+
+        let nameEl = document.createElement('div');
+        nameEl.classList.add('standings_name');
+
+        let gapEl = document.createElement('div');
+        gapEl.classList.add('standings_gap');
+
+        let el = document.createElement('div');
+        el.classList.add('standings', 'standings_others');
+        el.append(svgEl, positionEl, numberEl, nameEl, gapEl);
+        g_standingsEl.append(el);
+    }
+}
+
+function formatLaps(nrLaps)
+{
+    if (nrLaps == 1)
+    {
+        return `1 lap`;
+    }
+    else
+    {
+        return `${nrLaps} laps`;
+    }
+}
+
+function formatGapTo(current, ahead)
+{
+    if (ahead === undefined)
+    {
+        return formatLaps(current.Laps);
+    }
+
+    let lapDifference = ahead.ExactLaps - current.ExactLaps;
+    if (lapDifference > 1)
+    {
+        return '﹢' + formatLaps(Math.floor(lapDifference));
+    }
+
+    return '﹢' + formatTimeDelta(current.GapsAhead_ms[ahead.CarId], 1, false);
+}
+
+function updateStandings()
+{
+    let cars = Object.values(g_cars);
+    cars.sort((a, b) => b.ExactLaps - a.ExactLaps);
+
+    ensureNrOfStandingsNodes(cars.length);
+
+    for (let i = 0; i < cars.length; i++)
+    {
+        let car = cars[i];
+        let el = g_standingsEl.children[i];
+        el.children[1].innerText = i + 1;
+        el.children[2].innerText = car.RaceNumber;
+        el.children[3].innerText = car.Drivers[car.CurrentDriverIndex].ShortName;
+        el.children[4].innerText = formatGapTo(car, cars[i-1]);
+
+        let svgUseEl = el.children[0].children[0];
+        if (car.CarId == g_focusedCarId)
+        {
+            g_standingsFocusedCarIndex = i;
+            if (svgUseEl.getAttribute('href') == '#standings_others')
+            {
+                svgUseEl.setAttribute('href', '#standings_me');
+                if (!g_standingsIsScrolling)
+                {
+                    standingsScrollToFocusedCar();
+                }
+            }
+        }
+        else
+        {
+            if (svgUseEl.getAttribute('href') == '#standings_me')
+            {
+                svgUseEl.setAttribute('href', '#standings_others');
+            }
         }
     }
 }
@@ -1024,16 +939,72 @@ newHandler('trackGaps', setTrackGaps);
 newHandler('pitEvent', handlePitEvent);
 
 
-// let g_standingsTop = 0;
+let g_standingsIsScrolling = false;
+let g_standingsScrollStart = null;
+let g_standingsScrollIntoViewOptions = {
+    'behavior': 'smooth',
+    'block': 'center',
+}
+const g_standingsInView = 15;
+const g_standingsOneHeight = 36;
 
-// var g_lastStandingsUpdate = performance.now()
-// function scrollStandings(timestamp)
-// {
-//     document.getElementById('standings').scrollTop = g_standingsTop++;
-//     window.requestAnimationFrame(scrollStandings);
-// }
+function startScrollStandings()
+{
+    g_standingsIsScrolling = true;
 
-// window.requestAnimationFrame(scrollStandings);
+    g_standingsEl.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+
+    setTimeout(() => window.requestAnimationFrame(scrollStandings), 5000);
+}
+
+function stopScrollStandings()
+{
+    standingsScrollToFocusedCar();
+    setTimeout(startScrollStandings, 20000);
+    g_standingsIsScrolling = false;
+}
+
+function scrollStandings(timestamp)
+{
+    if (g_standingsScrollStart === null)
+    {
+        g_standingsScrollStart = timestamp;
+    }
+
+    let maxScrollTop = g_standingsOneHeight * (g_standingsEl.childElementCount - g_standingsInView);
+
+    const scrollSpeed = 30; // pixels / second
+    let scrollTop = (timestamp - g_standingsScrollStart) / 1000 * scrollSpeed;
+
+    if (scrollTop > maxScrollTop)
+    {
+        scrollAmount = maxScrollTop;
+        setTimeout(stopScrollStandings, 5000);
+        g_standingsScrollStart = null;
+    }
+    else
+    {
+        window.requestAnimationFrame(scrollStandings);
+    }
+
+    g_standingsEl.scrollTop = scrollTop;
+}
+
+function standingsScrollToFocusedCar()
+{
+    let scrollTopIndex = Math.floor(Math.max(0, g_standingsFocusedCarIndex - (g_standingsInView / 2)));
+    let scrollTop = scrollTopIndex * g_standingsOneHeight;
+    let maxScrollTop = g_standingsOneHeight * (g_standingsEl.childElementCount - g_standingsInView);
+    g_standingsEl.scrollTo({
+        top: Math.min(scrollTop, maxScrollTop),
+        behavior: 'smooth'
+    });
+}
+
+startScrollStandings();
 
 </script>
 </html>
