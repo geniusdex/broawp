@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/geniusdex/broawp/accbroadcast"
+	"github.com/geniusdex/broawp/accdata"
 )
 
 const (
@@ -42,6 +43,7 @@ type carGap struct {
 type Car struct {
 	CarId              int
 	IsConnected        bool
+	CarModel           *accdata.CarModel
 	TeamName           string
 	RaceNumber         int
 	CurrentDriverIndex int
@@ -85,6 +87,7 @@ func NewCar(msg *accbroadcast.MsgEntryListCar) *Car {
 	car := &Car{
 		CarId:                   int(msg.CarId),
 		IsConnected:             false,
+		CarModel:                accdata.CarModelByID(int(msg.CarModelType)),
 		lastLapPositionTimes:    make([]*positionTime, 0),
 		currentLapPositionTimes: make([]*positionTime, 0),
 		gapsAhead:               make(map[int]time.Duration),
@@ -95,6 +98,7 @@ func NewCar(msg *accbroadcast.MsgEntryListCar) *Car {
 }
 
 func (c *Car) UpdateFromEntryList(msg *accbroadcast.MsgEntryListCar) {
+	c.CarModel = accdata.CarModelByID(int(msg.CarModelType))
 	c.TeamName = msg.TeamName
 	c.RaceNumber = int(msg.RaceNumber)
 	c.Drivers = make([]*Driver, len(msg.Drivers))

@@ -164,17 +164,45 @@ body {
 }
 
 .nearby_number {
+    /*
     position: absolute;
     top: 5px;
     left: 0px;
     width: 75px;
     text-align: right;
+    */
+    position: absolute;
+    top: 1px;
+    left: 0px;
+    width: 75px;
+    height: 26px;
+    padding: 4px 5px 5px 0px;
+    text-align: right;
+}
+
+.nearby_logo {
+    position: absolute;
+    top: 1px;
+    left: 75px;
+    width: 26px;
+    height: 26px;
+    padding: 4px 5px 5px;
+}
+
+.nearby_me > .nearby_number,
+.nearby_me > .nearby_logo {
+    background-color: #b34612;
+}
+
+.nearby_others > .nearby_number,
+.nearby_others > .nearby_logo {
+    background-color: #343c44;
 }
 
 .nearby_name {
     position: absolute;
     top: 5px;
-    left: 100px;
+    left: 120px;
 }
 
 .nearby_name_laps {
@@ -194,21 +222,21 @@ body {
 #standings_container {
     position: absolute;
     top: 280px;
-    left: 1310px;
-    width: 290px;
+    left: 1340px;
+    width: 260px;
     display: flex;
     flex-direction: column;
 }
 
 #standings {
-    height: 539px;
+    height: 543px;
     overflow: hidden;
     white-space: nowrap;
 }
 
 .standings_header {
     position: relative;
-    margin-left: 70px;
+    margin-left: 40px;
     width: 220px;
     height: 27px;
     font-family: sans-serif;
@@ -262,23 +290,45 @@ body {
 
 .standings_number {
     position: absolute;
-    top: 5px;
-    left: 70px;
-    width: 50px;
+    top: 1px;
+    left: 83px;
+    width: 42px;
+    height: 26px;
+    padding: 4px 5px 5px 0px;
     text-align: right;
+}
+
+.standings_logo {
+    position: absolute;
+    top: 1px;
+    left: 125px;
+    width: 26px;
+    height: 26px;
+    padding: 4px 5px 5px;
+}
+
+.standings_me > .standings_number,
+.standings_me > .standings_logo {
+    background-color: #b34612;
+}
+
+.standings_others > .standings_number,
+.standings_others > .standings_logo {
+    background-color: #343c44;
 }
 
 .standings_name {
     position: absolute;
     top: 5px;
-    left: 135px;
-    width: 50px;
+    left: 155px;
+    width: 30px;
+    visibility: hidden;
 }
 
 .standings_gap {
     position: absolute;
-    top: 5px;
-    left: 180px;
+    bottom: 5px;
+    left: 150px;
     width: 90px;
     text-align: right;
 }
@@ -467,6 +517,7 @@ body {
         <div id="nearby_ahead3" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others_top" /></svg>
             <div class="nearby_number" id="nearby_ahead3_number"></div>
+            <img class="nearby_logo" id="nearby_ahead3_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_ahead3_name"></span>
                 <span class="nearby_name_laps" id="nearby_ahead3_laps"></span>
@@ -476,6 +527,7 @@ body {
         <div id="nearby_ahead2" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_ahead2_number"></div>
+            <img class="nearby_logo" id="nearby_ahead2_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_ahead2_name"></span>
                 <span class="nearby_name_laps" id="nearby_ahead2_laps"></span>
@@ -485,6 +537,7 @@ body {
         <div id="nearby_ahead1" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_ahead1_number"></div>
+            <img class="nearby_logo" id="nearby_ahead1_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_ahead1_name"></span>
                 <span class="nearby_name_laps" id="nearby_ahead1_laps"></span>
@@ -494,6 +547,7 @@ body {
         <div id="nearby_me" class="nearby nearby_me">
             <svg width="825" height="45" version="2.0"><use href="#nearby_me" /></svg>
             <div class="nearby_number" id="nearby_me_number"></div>
+            <img class="nearby_logo" id="nearby_me_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_me_name"></span>
                 <span class="nearby_name_laps" id="nearby_me_laps"></span>
@@ -503,6 +557,7 @@ body {
         <div id="nearby_behind1" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_behind1_number"></div>
+            <img class="nearby_logo" id="nearby_behind1_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_behind1_name"></span>
                 <span class="nearby_name_laps" id="nearby_behind1_laps"></span>
@@ -512,6 +567,7 @@ body {
         <div id="nearby_behind2" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_behind2_number"></div>
+            <img class="nearby_logo" id="nearby_behind2_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_behind2_name"></span>
                 <span class="nearby_name_laps" id="nearby_behind2_laps"></span>
@@ -521,6 +577,7 @@ body {
         <div id="nearby_behind3" class="nearby nearby_others">
             <svg width="825" height="45" version="2.0"><use href="#nearby_others" /></svg>
             <div class="nearby_number" id="nearby_behind3_number"></div>
+            <img class="nearby_logo" id="nearby_behind3_logo" />
             <div class="nearby_name">
                 <span class="nearby_name_name" id="nearby_behind3_name"></span>
                 <span class="nearby_name_laps" id="nearby_behind3_laps"></span>
@@ -703,6 +760,7 @@ function updateTrackGap(id, carId, gap_ms)
 
     document.getElementById(id + '_number').innerText = car.RaceNumber;
     document.getElementById(id + '_name').innerText = driver.FirstName.charAt(0) + '. ' + driver.LastName;
+    document.getElementById(id + '_logo').src = `static/carlogo/26/${car.CarModel.ManufacturerLabel}.png`;
     document.getElementById(id + '_time').innerText = car.IsInPit
                                                     ? 'PIT'
                                                     : formatTimeDelta(gap_ms);
@@ -787,6 +845,9 @@ function ensureNrOfStandingsNodes(nr)
         let numberEl = document.createElement('div');
         numberEl.classList.add('standings_number');
 
+        let logoEl = document.createElement('img');
+        logoEl.classList.add('standings_logo');
+
         let nameEl = document.createElement('div');
         nameEl.classList.add('standings_name');
 
@@ -795,7 +856,7 @@ function ensureNrOfStandingsNodes(nr)
 
         let el = document.createElement('div');
         el.classList.add('standings', 'standings_others');
-        el.append(svgEl, positionEl, numberEl, nameEl, gapEl);
+        el.append(svgEl, positionEl, numberEl, logoEl, nameEl, gapEl);
         g_standingsEl.append(el);
     }
 }
@@ -841,8 +902,9 @@ function updateStandings()
         let el = g_standingsEl.children[i];
         el.children[1].innerText = i + 1;
         el.children[2].innerText = car.RaceNumber;
-        el.children[3].innerText = car.Drivers[car.CurrentDriverIndex].ShortName;
-        el.children[4].innerText = formatGapTo(car, cars[i-1]);
+        el.children[3].src = `static/carlogo/26/${car.CarModel.ManufacturerLabel}.png`;
+        el.children[4].innerText = car.Drivers[car.CurrentDriverIndex].ShortName;
+        el.children[5].innerText = formatGapTo(car, cars[i-1]);
 
         let svgUseEl = el.children[0].children[0];
         if (car.CarId == g_focusedCarId)
@@ -850,6 +912,8 @@ function updateStandings()
             g_standingsFocusedCarIndex = i;
             if (svgUseEl.getAttribute('href') == '#standings_others')
             {
+                el.classList.remove('standings_others');
+                el.classList.add('standings_me');
                 svgUseEl.setAttribute('href', '#standings_me');
                 if (!g_standingsIsScrolling)
                 {
@@ -861,6 +925,8 @@ function updateStandings()
         {
             if (svgUseEl.getAttribute('href') == '#standings_me')
             {
+                el.classList.remove('standings_me');
+                el.classList.add('standings_others');
                 svgUseEl.setAttribute('href', '#standings_others');
             }
         }
@@ -957,7 +1023,15 @@ function startScrollStandings()
         behavior: 'smooth'
     });
 
-    setTimeout(() => window.requestAnimationFrame(scrollStandings), 5000);
+    standingsMakeAllVisible();
+    setTimeout(() => {
+        g_standingsEl.children[g_standingsInView].style.visibility = 'hidden';
+    }, 250);
+
+    setTimeout(() => {
+        window.requestAnimationFrame(scrollStandings);
+        g_standingsEl.children[g_standingsInView].style.visibility = 'visible';
+    }, 5000);
 }
 
 function stopScrollStandings()
@@ -984,6 +1058,12 @@ function scrollStandings(timestamp)
         scrollAmount = maxScrollTop;
         setTimeout(stopScrollStandings, 5000);
         g_standingsScrollStart = null;
+
+        if (g_standingsEl.childElementCount > g_standingsInView)
+        {
+            let hideIndex = g_standingsEl.childElementCount - g_standingsInView - 1;
+            g_standingsEl.children[hideIndex].style.visibility = 'hidden';
+        }
     }
     else
     {
@@ -1002,6 +1082,29 @@ function standingsScrollToFocusedCar()
         top: Math.min(scrollTop, maxScrollTop),
         behavior: 'smooth'
     });
+
+    standingsMakeAllVisible();
+    setTimeout(() => {
+        let maxHideIndex = g_standingsEl.childElementCount - g_standingsInView - 1;
+        let hideIndex = Math.min(scrollTopIndex - 1, maxHideIndex);
+        if (hideIndex > 0)
+        {
+            g_standingsEl.children[hideIndex].style.visibility = 'hidden';
+        }
+        let scrollPastBottomIndex = scrollTopIndex + g_standingsInView;
+        if (scrollPastBottomIndex < g_standingsEl.childElementCount)
+        {
+            g_standingsEl.children[scrollPastBottomIndex].style.visibility = 'hidden';
+        }
+    }, 250);
+}
+
+function standingsMakeAllVisible()
+{
+    for (let el of g_standingsEl.children)
+    {
+        el.style.visibility = 'visible';
+    }
 }
 
 startScrollStandings();
