@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BROAWP Driver Overlay</title>
+    <link rel="stylesheet" href="static/driver.css">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<svg version="2.0">
+    <symbol id="svg_wiggler_left" width="22" height="60">
+        <path d="M 0 60  L 20 0  L 22 0  L 22 60  Z" />
+    </symbol>
+    <symbol id="svg_wiggler_right" width="22" height="60">
+        <path d="M 0 0  L 22 0  L 2 60  L 0 60  Z" />
+    </symbol>
+    <symbol id="svg_wiggler_left_reverse" width="22" height="60">
+        <path d="M 0 0  L 20 60  L 22 60  L 22 0  Z" />
+    </symbol>
+    <symbol id="svg_wiggler_right_reverse" width="22" height="60">
+        <path d="M 0 60  L 22 60  L 2 0  L 0 0  Z" />
+    </symbol>
+</svg>
+<div id="driver_box">
+    <div id="drivers_ahead" class="drivers_relative">
+        <div class="driver_ahead driver_relative" data-wiggler>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">17</span>
+            </div>
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" src="static/carlogo/26/aston_martin.png" />
+            </div>
+            <div class="name behind">
+                <span name="name">H. Messenger</span>
+                <span name="laps_offset">-1 lap</span>
+            </div>
+            <div class="offset"><span name="time_offset">+18.40</span></div>
+        </div>
+        <div class="driver_ahead driver_relative" data-wiggler>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">2</span>
+            </div>
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" src="static/carlogo/26/porsche.png" />
+            </div>
+            <div class="name ahead">
+                <span name="name">J. Koll</span>
+                <span name="laps_offset">+2 laps</span>
+            </div>
+            <div class="offset"><span name="time_offset">+4.02</span></div>
+        </div>
+        <div class="driver_ahead driver_relative" data-wiggler>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">404</span>
+            </div>
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" src="static/carlogo/26/bmw.png" />
+            </div>
+            <div class="name">
+                <span name="name">M. Langerak</span>
+                <span name="laps_offset"></span>
+            </div>
+            <div class="offset"><span name="time_offset">+1.78</span></div>
+        </div>
+    </div>
+    <div id="current_driver" data-wiggler>
+        <div class="header">
+            <div name="racenumber" data-wiggler="left">
+                <span>418</span>
+            </div>
+            <div name="carlogo" data-wiggler="right">
+                <img src="static/carlogo/26/audi.png" />
+            </div>
+            <div name="name"><span>P. Bootsma</span></div>
+        </div>
+        <div class="laptimes">
+            <div class="best label">Best</div>
+            <div class="best time">1:58.782</div>
+            <div class="last label">Last</div>
+            <div class="last time">2:00.368</div>
+            <div class="current label">Current</div>
+            <div class="current time">0:46.328</div>
+            <div class="current offset faster">-0.41</div>
+        </div>
+        <div class="telemetry">
+            <div class="gear label">Gear</div>
+            <div class="gear value">4</div>
+            <div class="gear unit"></div>
+            <div class="speed label">Speed</div>
+            <div class="speed value">185</div>
+            <div class="speed unit">km/h</div>
+        </div>
+    </div>
+    <div id="drivers_behind" class="drivers_relative">
+        <div class="driver_behind driver_relative" data-wiggler>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">17</span>
+            </div>
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" src="static/carlogo/26/aston_martin.png" />
+            </div>
+            <div class="name behind">
+                <span name="name">H. Messenger</span>
+                <span name="laps_offset">-1 lap</span>
+            </div>
+            <div class="offset"><span name="time_offset">-0.78</span></div>
+        </div>
+        <div class="driver_behind driver_relative" data-wiggler>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">404</span>
+            </div>
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" src="static/carlogo/26/bmw.png" />
+            </div>
+            <div class="name">
+                <span name="name">M. Langerak</span>
+                <span name="laps_offset"></span>
+            </div>
+            <div class="offset"><span name="time_offset">-3.02</span></div>
+        </div>
+        <div class="driver_behind driver_relative" data-wiggler>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">2</span>
+            </div>
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" src="static/carlogo/26/porsche.png" />
+            </div>
+            <div class="name ahead">
+                <span name="name">J. Koll</span>
+                <span name="laps_offset">+2 laps</span>
+            </div>
+            <div class="offset"><span name="time_offset">-18.40</span></div>
+        </div>
+    </div>
+</div>
+<div id="standings">
+    <div class="header">
+        <div class="session_type" data-wiggler="none"><span name="session_type">-</span></div>
+        <div class="time" data-wiggler="both"><span name="remaining_time">-:--:--</span></div>
+        <div class="timing_type" data-wiggler="none"><span name="timing_type">Interval</span></div>
+    </div>
+    <div class="entries_container">
+        <div class="entries"></div>
+    </div>
+    <template id="standings_entry">
+        <div class="entry">
+            <div class="position"><span name="position"></span></div>
+            <div class="racenumber"><span name="racenumber"></span></div>
+            <div class="carlogo"><img name="carlogo" /></div>
+            <div class="name"><span name="name"></span></div>
+            <div class="offset"><span name="offset"></span></div>
+        </div>
+    </template>
+</div>
+<template id="wiggler_none">
+    <div class="wiggler background">
+        <div class="wiggler_fill"></div>
+    </div>
+</template>
+<template id="wiggler_both">
+    <div class="wiggler background">
+        <svg class="wiggler_left" viewBox="0 0 22 60" version="2.0">
+            <use href="#svg_wiggler_left" />
+        </svg>
+        <div class="wiggler_fill"></div>
+        <svg class="wiggler_right" viewBox="0 0 22 60" version="2.0">
+            <use href="#svg_wiggler_right" />
+        </svg>
+    </div>
+</template>
+<template id="wiggler_both_reverse_left">
+    <div class="wiggler background">
+        <svg class="wiggler_left" viewBox="0 0 22 60" version="2.0">
+            <use href="#svg_wiggler_left_reverse" />
+        </svg>
+        <div class="wiggler_fill"></div>
+        <svg class="wiggler_right" viewBox="0 0 22 60" version="2.0">
+            <use href="#svg_wiggler_right" />
+        </svg>
+    </div>
+</template>
+<template id="wiggler_left">
+    <div class="wiggler background">
+        <svg class="wiggler_left" viewBox="0 0 22 60" version="2.0">
+            <use href="#svg_wiggler_left" />
+        </svg>
+        <div class="wiggler_fill"></div>
+    </div>
+</template>
+<template id="wiggler_right">
+    <div class="wiggler background">
+        <div class="wiggler_fill"></div>
+        <svg class="wiggler_right" viewBox="0 0 22 60" version="2.0">
+            <use href="#svg_wiggler_right" />
+        </svg>
+    </div>
+</template>
+<script type="module" src="static/driver.mjs"></script>
+</body>
+</html>

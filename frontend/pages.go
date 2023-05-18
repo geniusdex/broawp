@@ -28,6 +28,10 @@ func (f *frontend) overlayHandler(w http.ResponseWriter, r *http.Request) {
 	f.executeTemplate(w, r, "overlay.html", nil)
 }
 
+func (f *frontend) driverHandler(w http.ResponseWriter, r *http.Request) {
+	f.executeTemplate(w, r, "driver.html", nil)
+}
+
 func (f *frontend) broadcastHandler(w http.ResponseWriter, r *http.Request) {
 	f.executeTemplate(w, r, "broadcast.html", nil)
 }

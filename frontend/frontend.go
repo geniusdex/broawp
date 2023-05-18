@@ -87,6 +87,7 @@ func Run(state *accrace.State) error {
 	http.HandleFunc("/", f.indexHandler)
 	http.HandleFunc("/broadcast", f.broadcastHandler)
 	http.HandleFunc("/disconnect", f.disconnectHandler)
+	http.HandleFunc("/driver", f.driverHandler)
 	http.HandleFunc("/overlay", f.overlayHandler)
 	http.HandleFunc("/ws", f.webSocketHandler)
 
