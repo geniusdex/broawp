@@ -22,116 +22,51 @@
     </symbol>
 </svg>
 <div id="driver_box">
-    <div id="drivers_ahead" class="drivers_relative">
-        <div class="driver_ahead driver_relative" data-wiggler>
-            <div class="racenumber" data-wiggler="left">
-                <span name="racenumber">17</span>
-            </div>
-            <div class="carlogo" data-wiggler="right">
-                <img name="carlogo" src="static/carlogo/26/aston_martin.png" />
-            </div>
-            <div class="name behind">
-                <span name="name">H. Messenger</span>
-                <span name="laps_offset">-1 lap</span>
-            </div>
-            <div class="offset"><span name="time_offset">+18.40</span></div>
-        </div>
-        <div class="driver_ahead driver_relative" data-wiggler>
-            <div class="racenumber" data-wiggler="left">
-                <span name="racenumber">2</span>
-            </div>
-            <div class="carlogo" data-wiggler="right">
-                <img name="carlogo" src="static/carlogo/26/porsche.png" />
-            </div>
-            <div class="name ahead">
-                <span name="name">J. Koll</span>
-                <span name="laps_offset">+2 laps</span>
-            </div>
-            <div class="offset"><span name="time_offset">+4.02</span></div>
-        </div>
-        <div class="driver_ahead driver_relative" data-wiggler>
-            <div class="racenumber" data-wiggler="left">
-                <span name="racenumber">404</span>
-            </div>
-            <div class="carlogo" data-wiggler="right">
-                <img name="carlogo" src="static/carlogo/26/bmw.png" />
-            </div>
-            <div class="name">
-                <span name="name">M. Langerak</span>
-                <span name="laps_offset"></span>
-            </div>
-            <div class="offset"><span name="time_offset">+1.78</span></div>
-        </div>
-    </div>
+    <div id="drivers_ahead" class="drivers_relative"></div>
     <div id="current_driver" data-wiggler>
         <div class="header">
-            <div name="racenumber" data-wiggler="left">
-                <span>418</span>
+            <div class="racenumber" data-wiggler="left">
+                <span name="racenumber">-</span>
             </div>
-            <div name="carlogo" data-wiggler="right">
-                <img src="static/carlogo/26/audi.png" />
+            <div class="carlogo" data-wiggler="right">
+                <img name="carlogo" />
             </div>
-            <div name="name"><span>P. Bootsma</span></div>
+            <div class="name"><span name="name">-</span></div>
         </div>
         <div class="laptimes">
             <div class="best label">Best</div>
-            <div class="best time">1:58.782</div>
+            <div class="best time" name="best_lap">-:--.---</div>
             <div class="last label">Last</div>
-            <div class="last time">2:00.368</div>
+            <div class="last time" name="last_lap">-:--.---</div>
             <div class="current label">Current</div>
-            <div class="current time">0:46.328</div>
-            <div class="current offset faster">-0.41</div>
+            <div class="current time" name="current_lap">-:--.000</div>
+            <div class="current delta" name="current_lap_delta">-0.41</div>
         </div>
         <div class="telemetry">
             <div class="gear label">Gear</div>
-            <div class="gear value">4</div>
+            <div class="gear value" name="gear">4</div>
             <div class="gear unit"></div>
             <div class="speed label">Speed</div>
-            <div class="speed value">185</div>
+            <div class="speed value" name="speed">185</div>
             <div class="speed unit">km/h</div>
         </div>
     </div>
-    <div id="drivers_behind" class="drivers_relative">
-        <div class="driver_behind driver_relative" data-wiggler>
+    <div id="drivers_behind" class="drivers_relative"></div>
+    <template id="driver_relative_template">
+        <div class="driver_relative" data-wiggler>
             <div class="racenumber" data-wiggler="left">
-                <span name="racenumber">17</span>
+                <span name="racenumber"></span>
             </div>
             <div class="carlogo" data-wiggler="right">
-                <img name="carlogo" src="static/carlogo/26/aston_martin.png" />
-            </div>
-            <div class="name behind">
-                <span name="name">H. Messenger</span>
-                <span name="laps_offset">-1 lap</span>
-            </div>
-            <div class="offset"><span name="time_offset">-0.78</span></div>
-        </div>
-        <div class="driver_behind driver_relative" data-wiggler>
-            <div class="racenumber" data-wiggler="left">
-                <span name="racenumber">404</span>
-            </div>
-            <div class="carlogo" data-wiggler="right">
-                <img name="carlogo" src="static/carlogo/26/bmw.png" />
+                <img name="carlogo" src="" />
             </div>
             <div class="name">
-                <span name="name">M. Langerak</span>
+                <span name="name"></span>
                 <span name="laps_offset"></span>
             </div>
-            <div class="offset"><span name="time_offset">-3.02</span></div>
+            <div class="offset"><span name="time_offset"></span></div>
         </div>
-        <div class="driver_behind driver_relative" data-wiggler>
-            <div class="racenumber" data-wiggler="left">
-                <span name="racenumber">2</span>
-            </div>
-            <div class="carlogo" data-wiggler="right">
-                <img name="carlogo" src="static/carlogo/26/porsche.png" />
-            </div>
-            <div class="name ahead">
-                <span name="name">J. Koll</span>
-                <span name="laps_offset">+2 laps</span>
-            </div>
-            <div class="offset"><span name="time_offset">-18.40</span></div>
-        </div>
-    </div>
+    </template>
 </div>
 <div id="standings">
     <div class="header">

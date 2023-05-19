@@ -84,6 +84,7 @@ type State struct {
 	CurrentLapUpdates    chan time.Duration
 	LapDeltaUpdates      chan time.Duration
 	TrackGapUpdates      chan []CarGap
+	MiniCarUpdates       chan *MiniCar
 
 	PitEvents chan *PitEvent
 
@@ -108,6 +109,7 @@ func NewState(client *accbroadcast.Client) *State {
 		LapDeltaUpdates:      make(chan time.Duration, 1024),
 		TrackGapUpdates:      make(chan []CarGap, 1024),
 		PitEvents:            make(chan *PitEvent, 1024),
+		MiniCarUpdates:       make(chan *MiniCar, 1024),
 	}
 
 	go state.handleIncomingMessages()

@@ -74,6 +74,16 @@ type Car struct {
 	gapsBehind map[int]time.Duration
 }
 
+// MiniCar is a subset of Car properties that are updated continuously
+type MiniCar struct {
+	CarId          int
+	Gear           int
+	SpeedKmh       int
+	SplinePosition float32
+	Delta_ms       time.Duration
+	CurrentLap_ms  time.Duration
+}
+
 func NewLap(msg *accbroadcast.MsgLap) *Lap {
 	return &Lap{
 		LapTime:     msg.LapTime,
@@ -177,6 +187,8 @@ func (c *Car) UpdateFromRealtime(msg *accbroadcast.MsgRealtimeCarUpdate, state *
 			NewLocation: c.Location,
 		}
 	}
+
+	state.MiniCarUpdates <- NewMiniCar(c)
 }
 
 func localTimeOfPositionInLap(splinePosition float32, positionTimes []*positionTime) (time.Time, bool) {
@@ -200,4 +212,15 @@ func (c *Car) lastLocalTimeOfPosition(splinePosition float32) (time.Time, bool) 
 		localTime, ok = localTimeOfPositionInLap(splinePosition, c.lastLapPositionTimes)
 	}
 	return localTime, ok
+}
+
+func NewMiniCar(c *Car) *MiniCar {
+	return &MiniCar{
+		CarId:          c.CarId,
+		Gear:           c.Gear,
+		SpeedKmh:       c.SpeedKmh,
+		SplinePosition: c.SplinePosition,
+		Delta_ms:       c.Delta / time.Millisecond,
+		CurrentLap_ms:  c.CurrentLap.LapTime / time.Millisecond,
+	}
 }

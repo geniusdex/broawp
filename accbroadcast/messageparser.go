@@ -115,7 +115,7 @@ func (mp *messageParser) parseRealtimeCarUpdate(br *bufferReader) (*MsgRealtimeC
 		CarIndex:       br.ReadUint16(),
 		DriverIndex:    br.ReadUint16(),
 		DriverCount:    br.ReadByte(),
-		Gear:           int(br.ReadByte()) - 2,
+		Gear:           int(br.ReadByte()) - 1,
 		WorldPosX:      br.ReadFloat32(),
 		WorldPosY:      br.ReadFloat32(),
 		Yaw:            br.ReadFloat32(),

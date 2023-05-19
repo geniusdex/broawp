@@ -93,6 +93,9 @@ func (f *frontend) sendWebSocketUpdates() {
 		case gaps := <-f.state.TrackGapUpdates:
 			f.sendGaps("trackGaps", gaps)
 
+		case miniCar := <-f.state.MiniCarUpdates:
+			f.sendMessageToWebSockets("minicar", miniCar)
+
 		case pitEvent := <-f.state.PitEvents:
 			f.sendPitEvent("pitEvent", pitEvent)
 		}

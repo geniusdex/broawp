@@ -85,5 +85,6 @@ export function timeDelta(time_ms, nrDigits = 2, addSign = true)
     var ms = absTime_ms % 1000;
     var s = (absTime_ms - ms) / 1000;
 
-    return sign + s.toString() + '.' + ms.toString().padStart(3, '0').substring(0, nrDigits);
+    return sign + (absTime_ms / 1000).toFixed(nrDigits);
+    // return sign + s.toString() + '.' + ms.toString().padStart(3, '0').substring(0, nrDigits);
 }

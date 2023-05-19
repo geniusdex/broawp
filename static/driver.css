@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Mitr');
+/* @import url('https://fonts.googleapis.com/css2?family=Mitr'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter'); */
+@import url('https://fonts.googleapis.com/css2?family=Rubik');
 
 html {
     --text-shadow: 0.1rem 0.05rem 0.1rem black;
@@ -15,7 +17,8 @@ html {
     --accent-label-text: rgb(224, 224, 224);
     --wiggler-ratio: 3; /* width -> height */
 
-    font-family: 'Mitr', sans-serif;
+    font-family: 'Rubik', sans-serif;
+    /* font-weight: 500; */
     font-size: 20px;
     color: white;
     text-shadow: var(--text-shadow);
@@ -107,7 +110,7 @@ body {
     position: relative;
     --wiggler-bg: var(--info-bg);
     color: var(--info-text);
-    width: 20.37em;
+    width: 20.8em;
     height: 1.8em;
     display: flex;
     flex-direction: row;
@@ -207,17 +210,18 @@ body {
     font-size: 0.7em;
 }
 
-.driver_relative .name.ahead {
+.driver_relative.lap_ahead .name {
     color: #fcc;
 }
 
-.driver_relative .name.behind {
+.driver_relative.lap_behind .name {
     color: #ccf;
 }
 
 .driver_relative .offset {
     margin-right: var(--wiggler-margin);
     padding-right: 0.3em;
+    font-variant-numeric: tabular-nums;
 }
 
 #current_driver {
@@ -240,7 +244,7 @@ body {
     align-items: center;
 }
 
-#current_driver [name="racenumber"] {
+#current_driver .racenumber {
     position: relative;
     --wiggler-bg: var(--accent-dark-bg);
     display: flex;
@@ -255,7 +259,7 @@ body {
     /* font-weight: bold; */
 }
 
-#current_driver [name="carlogo"] {
+#current_driver .carlogo {
     position: relative;
     --wiggler-bg: var(--accent-dark-bg);
     display: flex;
@@ -270,7 +274,7 @@ body {
     line-height: 1.2;
 }
 
-#current_driver [name="name"] {
+#current_driver .name {
     position: relative;
     font-size: 1.6em;
 }
@@ -281,10 +285,11 @@ body {
     left: calc(2rem / var(--wiggler-ratio));
     display: grid;
     /* grid-template: repeat(3, min-content) / repeat(4, min-content); */
-    grid-template-columns: min-content 6ch calc(6ch * 0.2 - 0.5em) min-content;
+    grid-template-columns: min-content 6ch calc(6ch * 0.2) min-content;
     gap: 0.2em 0.5em;
     line-height: 1;
     align-items: start;
+    font-variant-numeric: tabular-nums;
 }
 
 #current_driver .laptimes .best {
@@ -307,7 +312,7 @@ body {
 }
 
 #current_driver .laptimes .time {
-    grid-column: 2;
+    grid-column: 2 / 4;
     text-align: right;
 }
 
@@ -317,7 +322,7 @@ body {
     text-align: left;
 }
 
-#current_driver .laptimes .offset {
+#current_driver .laptimes .delta {
     grid-column: 4;
     font-size: 1em;
     /* align-self: end; */
@@ -352,6 +357,7 @@ body {
 #current_driver .telemetry .value {
     font-size: 2.4em;
     justify-self: center;
+    font-variant-numeric: tabular-nums;
 }
 
 #current_driver .telemetry .unit {
@@ -366,6 +372,8 @@ body {
 #current_driver .telemetry .gear.value {
     grid-area: gv;
     font-size: 2.8em;
+    width: 1ch;
+    text-align: center;
 }
 
 #current_driver .telemetry .gear.unit {
@@ -396,8 +404,6 @@ body {
 #standings .header {
     width: 100%;
     color: var(--accent-text);
-    display: flex;
-    align-items: end;
     text-align: center;
     white-space: nowrap;
     position: relative;
@@ -408,38 +414,56 @@ body {
 }
 
 #standings .header .time {
-    flex-grow: 1;
+    position: absolute;
+    inset: 0 6em 0 1.5em;
+    width: 6em;
+    /* flex-grow: 1; */
     z-index: 2;
     font-size: 1.4em;
     position: relative;
     --wiggler-bg: var(--accent-dark-bg);
     /* padding: 0 calc(2 * var(--wiggler-margin)); */
-    margin: 0 calc(-1 * var(--wiggler-margin));
+    /* margin: 0 calc(-1 * var(--wiggler-margin)); */
     filter: drop-shadow(var(--mini-box-shadow));
+    font-variant-numeric: tabular-nums;
 }
 
 #standings .header .time span {
-    width: 3.35em;
-    text-align: left;
+    margin: 0.2em 0;
+    text-align: center;
     display: inline-block;
 }
 
 #standings .header .session_type {
+    position: absolute;
+    left: 0;
+    bottom: 0;
     font-size: 1.2em;
     padding: 0 2.5em 0 0.5em;
-    margin-right: calc(-2em + var(--wiggler-margin));
-    position: relative;
+    /* margin-right: calc(-2em + var(--wiggler-margin)); */
     --wiggler-bg: var(--accent-bg);
 }
 
+#standings .header .session_type span {
+    display: inline-block;
+    margin: 0.2em 0;
+}
+
 #standings .header .timing_type {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     font-size: 0.8em;
     width: 5em;
     text-align: right;
     padding: 0 0.5em 0 2.5em;
-    margin-left: calc(-2em + var(--wiggler-margin));
-    position: relative;
+    /* margin-left: calc(-2em + var(--wiggler-margin)); */
     --wiggler-bg: var(--accent-bg);
+}
+
+#standings .header .timing_type span {
+    display: inline-block;
+    margin: 0.2em 0;
 }
 
 #standings .entries_container {
@@ -471,9 +495,10 @@ body {
 }
 
 #standings .entry .position {
-    width: 2.2ch;
+    width: 3ch;
     text-align: right;
     margin-right: 0.2em;
+    font-variant-numeric: tabular-nums;
 }
 
 #standings .entry .position::after {
@@ -514,6 +539,7 @@ body {
     text-align: right;
     padding-right: 0.3em;
     overflow: hidden;
+    font-variant-numeric: tabular-nums;
 }
 
 #standings .entry.current_driver {

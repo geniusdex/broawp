@@ -33,6 +33,11 @@ export class State
         });
     }
 
+    carsSortedOnTrackPosition()
+    {
+        return Object.values(this.#cars).sort((a, b) => a.SplinePosition - b.SplinePosition);
+    }
+
     setSessionType(sessionType)
     {
         this.#sessionType = sessionType;
