@@ -154,16 +154,20 @@ class DriverAhead extends DriverRelative
         super(template, 'driver_ahead');
     }
 
-    update(car, relativeToCar)
+    update(car, relativeToCar, sessionTargetIsLaps)
     {
         const gap_ms = relativeToCar.GapsAhead_ms[car.CarId];
 
-        const carLaps = car.Laps + car.SplinePosition;
-        const relativeToLaps = relativeToCar.Laps + relativeToCar.SplinePosition;
-        let lapsAhead = carLaps - relativeToLaps;
-        if (lapsAhead <= 0)
+        let lapsAhead = 0;
+        if (sessionTargetIsLaps)
         {
-            lapsAhead -= 1;
+            const carLaps = car.Laps + car.SplinePosition;
+            const relativeToLaps = relativeToCar.Laps + relativeToCar.SplinePosition;
+            lapsAhead = carLaps - relativeToLaps;
+            if (lapsAhead <= 0)
+            {
+                lapsAhead -= 1;
+            }
         }
 
         super.update(car, gap_ms, Math.trunc(lapsAhead));
@@ -182,16 +186,20 @@ class DriverBehind extends DriverRelative
         super(template, 'driver_behind');
     }
 
-    update(car, relativeToCar)
+    update(car, relativeToCar, sessionTargetIsLaps)
     {
         const gap_ms = relativeToCar.GapsBehind_ms[car.CarId];
 
-        const carLaps = car.Laps + car.SplinePosition;
-        const relativeToLaps = relativeToCar.Laps + relativeToCar.SplinePosition;
-        let lapsAhead = carLaps - relativeToLaps;
-        if (lapsAhead >= 0)
+        let lapsAhead = 0;
+        if (sessionTargetIsLaps)
         {
-            lapsAhead += 1;
+            const carLaps = car.Laps + car.SplinePosition;
+            const relativeToLaps = relativeToCar.Laps + relativeToCar.SplinePosition;
+            lapsAhead = carLaps - relativeToLaps;
+            if (lapsAhead >= 0)
+            {
+                lapsAhead += 1;
+            }
         }
 
         super.update(car, -gap_ms, Math.trunc(lapsAhead));
@@ -279,6 +287,7 @@ export class DriverBox
         const atWrapped = (arr, i) => arr.at(i % arr.length);
 
         const cars = this.#state.carsSortedOnTrackPosition();
+        const sessionTargetIsLaps = this.#state.sessionTargetIsLaps();
 
         for (let i = 0; i < cars.length; i++)
         {
@@ -288,12 +297,12 @@ export class DriverBox
 
                 for (let j = 0; j < this.#ahead.length; j++)
                 {
-                    this.#ahead[j].update(atWrapped(cars, i+j+1), current);
+                    this.#ahead[j].update(atWrapped(cars, i+j+1), current, sessionTargetIsLaps);
                 }
 
                 for (let j = 0; j < this.#behind.length; j++)
                 {
-                    this.#behind[j].update(atWrapped(cars, i-j-1), current);
+                    this.#behind[j].update(atWrapped(cars, i-j-1), current, sessionTargetIsLaps);
                 }
             }
         }
